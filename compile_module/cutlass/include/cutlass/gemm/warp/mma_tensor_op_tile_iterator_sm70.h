@@ -1196,7 +1196,7 @@ public:
     };
 
 private:
-    // Assume accumulator tile is multipile interleaved 32x32 tile.
+    // Assume accumulator tile is multiple interleaved 32x32 tile.
     static int const kElementsPerPartial = 4;
     using EleShapePerPatial = typename platform::conditional<
             platform::is_same<Element, float>::value, MatrixShape<2, 2>,
