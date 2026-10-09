@@ -29,7 +29,7 @@ function(cutlass_example_add_executable NAME)
 
   set(options)
   set(oneValueArgs)
-  set(multiValueArgs DEPENDS DEPENDEES TEST_COMMAND_OPTIONS)
+  set(multiValueArgs DEPENDS DEPENDENCIES TEST_COMMAND_OPTIONS)
   cmake_parse_arguments(_ "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
 
   cutlass_add_executable(${NAME} ${__UNPARSED_ARGUMENTS})
@@ -57,7 +57,7 @@ function(cutlass_example_add_executable NAME)
   cutlass_add_executable_tests(
     test_examples_${NAME} ${NAME}
     DEPENDS ${__DEPENDS}
-    DEPENDEES test_examples ${__DEPENDEES}
+    DEPENDENCIES test_examples ${__DEPENDEES}
     TEST_COMMAND_OPTIONS ${__TEST_COMMAND_OPTIONS}
     DISABLE_EXECUTABLE_INSTALL_RULE
     )
