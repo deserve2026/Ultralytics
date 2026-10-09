@@ -17,7 +17,7 @@ torch-dct==0.1.6
 polars
 dill
 easydict
-albumentationsx==2.0.16
+albumentationsx==2.4.13
 setuptools==80.10.2
 
 # ------------------ 装不成功可以先注释这两个(只有极少部分改进依赖这两个包)
