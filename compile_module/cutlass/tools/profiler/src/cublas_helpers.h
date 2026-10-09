@@ -71,7 +71,7 @@ Status cublas_satisfies(library::GemmDescription const& desc);
 
 /// This is a helper class to create cublasHandle_t automatically on
 /// CublasCreate object creation and to destroy cublasHandle_t on CublasCreate
-/// object destruction. Additionaly, it provides implicit cast from
+/// object destruction. Additionally, it provides implicit cast from
 /// CublasCreate's object to cublasHandle_t's object
 class CublasCreate {
 private:

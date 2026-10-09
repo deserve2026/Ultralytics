@@ -6,19 +6,15 @@
 # Modified from https://github.com/chengdazhi/Deformable-Convolution-V2-PyTorch/tree/pytorch_1.0.0
 # ------------------------------------------------------------------------------------------------
 
-import os
 import glob
+import os
 
 import torch
-
-from torch.utils.cpp_extension import CUDA_HOME
-from torch.utils.cpp_extension import CppExtension
-from torch.utils.cpp_extension import CUDAExtension
-
-from setuptools import find_packages
 from setuptools import setup
+from torch.utils.cpp_extension import CUDA_HOME, CppExtension, CUDAExtension
 
 requirements = ["torch", "torchvision"]
+
 
 def get_extensions():
     this_dir = os.path.dirname(os.path.abspath(__file__))
@@ -45,7 +41,7 @@ def get_extensions():
             "-O3",
         ]
     else:
-        raise NotImplementedError('Cuda is not available')
+        raise NotImplementedError("Cuda is not available")
 
     sources = [os.path.join(extensions_dir, s) for s in sources]
     include_dirs = [extensions_dir]
@@ -60,13 +56,14 @@ def get_extensions():
     ]
     return ext_modules
 
+
 setup(
     name="DCNv4",
     version="1.0.0.post2",
     author="Yuwen Xiong, Feng Wang",
     url="",
     description="PyTorch Wrapper for CUDA Functions of DCNv4",
-    packages=['DCNv4', 'DCNv4/functions', 'DCNv4/modules'],
+    packages=["DCNv4", "DCNv4/functions", "DCNv4/modules"],
     ext_modules=get_extensions(),
     cmdclass={"build_ext": torch.utils.cpp_extension.BuildExtension},
 )

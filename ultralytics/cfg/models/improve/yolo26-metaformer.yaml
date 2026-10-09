@@ -30,7 +30,17 @@ backbone:
   - [-1, 2, C3k2, [1024, True]] # 8-P5/32
   - [-1, 1, SPPF, [1024, 5, 3, True]] # 9-P5/32
   # - [-1, 1, MetaFormer_Block, [1024, {'module': AdaptiveSparseSA, 'param':{'num_heads': 8, 'sparseAtt': True}}, {'selfatt': True}]] # 10
-  - [-1, 1, MetaFormer_Block, [1024, {'module': AdaptiveSparseSA, 'param':{'num_heads': 8, 'sparseAtt': True}}, {'module': ConvolutionalGLU, 'param': {'act_layer': nn.GELU, 'drop': 0.0}}, {'selfatt': True}]] # 10-P5/32
+  - [
+      -1,
+      1,
+      MetaFormer_Block,
+      [
+        1024,
+        { "module": AdaptiveSparseSA, "param": { "num_heads": 8, "sparseAtt": True } },
+        { "module": ConvolutionalGLU, "param": { "act_layer": nn.GELU, "drop": 0.0 } },
+        { "selfatt": True },
+      ],
+    ] # 10-P5/32
   # - [-1, 1, MetaFormer_Block, [1024, {'module': AdaptiveSparseSA, 'param':{'num_heads': 8, 'sparseAtt': True}}, {'module': ConvolutionalGLU, 'param': {'act_layer': nn.GELU, 'drop': 0.0}}, {'module': DynamicTanh, 'param': {'channels_last': False}}, {'selfatt': True}]] # 10
   # - [-1, 1, MetaFormer_Block, [1024, {'module': AdaptiveSparseSA, 'param':{'num_heads': 8, 'sparseAtt': True}}, {'module': ConvolutionalGLU, 'param': {'act_layer': nn.GELU, 'drop': 0.0}}, {'module': DynamicERF, 'param': {}}, {'selfatt': True}]] # 10
   # - [-1, 1, MetaFormer_Mona, [1024, {'module': AdaptiveSparseSA, 'param':{'num_heads': 8, 'sparseAtt': True}}, {'module': ConvolutionalGLU, 'param': {'act_layer': nn.GELU, 'drop': 0.0}}, {'module': DynamicERF, 'param': {}}, {'selfatt': True}]] # 10

@@ -63,7 +63,7 @@ public:
     /// Underlying real-valued warp-level matrix multiply
     using Operator = Operator_;
 
-    /// Shape of warp-level matrix multipy
+    /// Shape of warp-level matrix multiply
     using Shape = typename Operator::Shape;
 
     /// Transformation applied to A operand (typically folded into math
