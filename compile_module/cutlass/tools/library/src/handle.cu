@@ -963,7 +963,7 @@ Operation const* find_conv_operation_for_parallel_reduction(
     ConvDescription const& conv_desc =
             static_cast<ConvDescription const&>(operation->description());
 
-    // if the curren conv operation accumulator and output data type match
+    // if the current conv operation accumulator and output data type match
     // return operation
     if (conv_desc.tile_description.math_instruction.element_accumulator ==
         conv_desc.C.element) {
@@ -1009,7 +1009,7 @@ Operation const* find_conv_operation_for_parallel_reduction(
         return nullptr;
     }
 
-    // return matching conv opertion (same tile sizes and instruction)
+    // return matching conv operation (same tile sizes and instruction)
     for (auto op : it->second) {
         if (op->description().tile_description ==
             operation->description().tile_description) {

@@ -352,7 +352,7 @@ struct DefaultConv2dFprop<
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
 
-/// Defines a kernel for Conv2dFprop specialzation for Optimzed
+/// Defines a kernel for Conv2dFprop specialzation for Optimized
 /// IteratorAlgorithm and multistage pipeline.
 template <typename ElementA, typename LayoutA, typename ElementB,
           typename LayoutB, typename ElementC, typename LayoutC,
@@ -413,7 +413,7 @@ struct DefaultConv2dFprop<
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
 
-/// Defines a kernel for Conv2dFprop specialzation for Optimzed
+/// Defines a kernel for Conv2dFprop specialzation for Optimized
 /// IteratorAlgorithm and
 // multistage pipeline with interleaved layout.
 template <typename ElementA, typename ElementB, typename ElementC,

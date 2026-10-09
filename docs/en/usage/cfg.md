@@ -110,10 +110,10 @@ Core arguments:
 
 - `cls_loss`: `bce | slide | ema_slide | focal | varifocal | qualityfocal`
 - `iou_loss`:
-  - base: `iou | giou | diou | ciou | eiou | siou | shapeiou | piou | piou2`
-  - composed: `inner_<base>` and `focaler_<base>` (for example `inner_diou`, `focaler_siou`)
-  - mpdiou family: `mpdiou | inner_mpdiou | focaler_mpdiou`
-  - wise family: `wiseiou`, `wiseiou_<variant>`, `wiseiou_inner_<variant>`, `wiseiou_focaler_<variant>`
+    - base: `iou | giou | diou | ciou | eiou | siou | shapeiou | piou | piou2`
+    - composed: `inner_<base>` and `focaler_<base>` (for example `inner_diou`, `focaler_siou`)
+    - mpdiou family: `mpdiou | inner_mpdiou | focaler_mpdiou`
+    - wise family: `wiseiou`, `wiseiou_<variant>`, `wiseiou_inner_<variant>`, `wiseiou_focaler_<variant>`
 - `iou_aux`: `none | gcd | nwd`
 - `iou_aux_ratio`: mix ratio when `iou_aux` is enabled
 
