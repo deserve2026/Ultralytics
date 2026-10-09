@@ -1,50 +1,44 @@
 # Modified by $@#Anonymous#@$ #20240123
 # Copyright (c) 2023, Albert Gu, Tri Dao.
-import sys
-import warnings
 import os
-import re
-import ast
-from pathlib import Path
-from packaging.version import parse, Version
-import platform
-import shutil
-
-from setuptools import setup, find_packages
 import subprocess
-from wheel.bdist_wheel import bdist_wheel as _bdist_wheel
+import warnings
+from pathlib import Path
 
 import torch
+from packaging.version import Version, parse
+from setuptools import setup
 from torch.utils.cpp_extension import (
-    BuildExtension,
-    CppExtension,
-    CUDAExtension,
     CUDA_HOME,
+    BuildExtension,
+    CUDAExtension,
 )
+from wheel.bdist_wheel import bdist_wheel as _bdist_wheel
 
 # ninja build does not work unless include_dirs are abs path
 this_dir = os.path.dirname(os.path.abspath(__file__))
 # For CI, we want the option to build with C++11 ABI since the nvcr images use C++11 ABI
 FORCE_CXX11_ABI = os.getenv("FORCE_CXX11_ABI", "FALSE") == "TRUE"
 
+
 def get_cuda_bare_metal_version(cuda_dir):
-    raw_output = subprocess.check_output(
-        [cuda_dir + "/bin/nvcc", "-V"], universal_newlines=True
-    )
+    raw_output = subprocess.check_output([cuda_dir + "/bin/nvcc", "-V"], universal_newlines=True)
     output = raw_output.split()
     release_idx = output.index("release") + 1
     bare_metal_version = parse(output[release_idx].split(",")[0])
 
     return raw_output, bare_metal_version
 
+
 MODES = ["core", "ndstate", "oflex"]
 # MODES = ["core", "ndstate", "oflex", "nrow"]
+
 
 def get_ext():
     cc_flag = []
 
-    print("\n\ntorch.__version__  = {}\n\n".format(torch.__version__))
-    print("\n\nCUDA_HOME = {}\n\n".format(CUDA_HOME))
+    print(f"\n\ntorch.__version__  = {torch.__version__}\n\n")
+    print(f"\n\nCUDA_HOME = {CUDA_HOME}\n\n")
 
     # Check, if CUDA11 is installed for compute capability 8.0
     multi_threads = True
@@ -55,10 +49,10 @@ def get_ext():
         if bare_metal_version >= Version("11.8"):
             gencode_sm90 = True
         if bare_metal_version < Version("11.6"):
-            warnings.warn("CUDA version ealier than 11.6 may leads to performance mismatch.")
+            warnings.warn("CUDA version earlier than 11.6 may leads to performance mismatch.")
         if bare_metal_version < Version("11.2"):
             multi_threads = False
-            
+
     cc_flag.extend(["-gencode", "arch=compute_70,code=sm_70"])
     cc_flag.extend(["-gencode", "arch=compute_80,code=sm_80"])
     if gencode_sm90:
@@ -72,13 +66,13 @@ def get_ext():
     if FORCE_CXX11_ABI:
         torch._C._GLIBCXX_USE_CXX11_ABI = True
 
-    sources = dict(
-        core=[
+    sources = {
+        "core": [
             "csrc/selective_scan/cus/selective_scan.cpp",
             "csrc/selective_scan/cus/selective_scan_core_fwd.cu",
             "csrc/selective_scan/cus/selective_scan_core_bwd.cu",
         ],
-        nrow=[
+        "nrow": [
             "csrc/selective_scan/cusnrow/selective_scan_nrow.cpp",
             "csrc/selective_scan/cusnrow/selective_scan_core_fwd.cu",
             "csrc/selective_scan/cusnrow/selective_scan_core_fwd2.cu",
@@ -89,24 +83,24 @@ def get_ext():
             "csrc/selective_scan/cusnrow/selective_scan_core_bwd3.cu",
             "csrc/selective_scan/cusnrow/selective_scan_core_bwd4.cu",
         ],
-        ndstate=[
+        "ndstate": [
             "csrc/selective_scan/cusndstate/selective_scan_ndstate.cpp",
             "csrc/selective_scan/cusndstate/selective_scan_core_fwd.cu",
             "csrc/selective_scan/cusndstate/selective_scan_core_bwd.cu",
         ],
-        oflex=[
+        "oflex": [
             "csrc/selective_scan/cusoflex/selective_scan_oflex.cpp",
             "csrc/selective_scan/cusoflex/selective_scan_core_fwd.cu",
             "csrc/selective_scan/cusoflex/selective_scan_core_bwd.cu",
         ],
-    )
+    }
 
-    names = dict(
-        core="selective_scan_cuda_core",
-        nrow="selective_scan_cuda_nrow",
-        ndstate="selective_scan_cuda_ndstate",
-        oflex="selective_scan_cuda_oflex",
-    )
+    names = {
+        "core": "selective_scan_cuda_core",
+        "nrow": "selective_scan_cuda_nrow",
+        "ndstate": "selective_scan_cuda_ndstate",
+        "oflex": "selective_scan_cuda_oflex",
+    }
 
     ext_modules = [
         CUDAExtension(
@@ -115,21 +109,21 @@ def get_ext():
             extra_compile_args={
                 "cxx": ["-O3", "-std=c++17"],
                 "nvcc": [
-                            "-O3",
-                            "-std=c++17",
-                            "-U__CUDA_NO_HALF_OPERATORS__",
-                            "-U__CUDA_NO_HALF_CONVERSIONS__",
-                            "-U__CUDA_NO_BFLOAT16_OPERATORS__",
-                            "-U__CUDA_NO_BFLOAT16_CONVERSIONS__",
-                            "-U__CUDA_NO_BFLOAT162_OPERATORS__",
-                            "-U__CUDA_NO_BFLOAT162_CONVERSIONS__",
-                            "--expt-relaxed-constexpr",
-                            "--expt-extended-lambda",
-                            "--use_fast_math",
-                            "--ptxas-options=-v",
-                            "-lineinfo",
-                        ]
-                        + cc_flag
+                    "-O3",
+                    "-std=c++17",
+                    "-U__CUDA_NO_HALF_OPERATORS__",
+                    "-U__CUDA_NO_HALF_CONVERSIONS__",
+                    "-U__CUDA_NO_BFLOAT16_OPERATORS__",
+                    "-U__CUDA_NO_BFLOAT16_CONVERSIONS__",
+                    "-U__CUDA_NO_BFLOAT162_OPERATORS__",
+                    "-U__CUDA_NO_BFLOAT162_CONVERSIONS__",
+                    "--expt-relaxed-constexpr",
+                    "--expt-extended-lambda",
+                    "--use_fast_math",
+                    "--ptxas-options=-v",
+                    "-lineinfo",
+                    *cc_flag,
+                ],
             },
             include_dirs=[Path(this_dir) / "csrc" / "selective_scan"],
         )
@@ -137,6 +131,7 @@ def get_ext():
     ]
 
     return ext_modules
+
 
 ext_modules = get_ext()
 setup(
@@ -155,7 +150,11 @@ setup(
         "Operating System :: Unix",
     ],
     ext_modules=ext_modules,
-    cmdclass={"bdist_wheel": _bdist_wheel, "build_ext": BuildExtension} if ext_modules else {"bdist_wheel": _bdist_wheel,},
+    cmdclass={"bdist_wheel": _bdist_wheel, "build_ext": BuildExtension}
+    if ext_modules
+    else {
+        "bdist_wheel": _bdist_wheel,
+    },
     python_requires=">=3.7",
     install_requires=[
         "torch",

@@ -75,7 +75,7 @@ enum {
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
-// Optionally target F16C extentions to accelerate half-precision conversion.
+// Optionally target F16C extensions to accelerate half-precision conversion.
 #if !defined(__CUDA_ARCH__) && (CUTLASS_ENABLE_F16C)
 #if defined(_MSC_VER)
 

@@ -7,6 +7,7 @@
 This is the official list of CUTLASS developers and contributors.
 
 ## DEVELOPERS
+
 Andrew Kerr  
 Haicheng Wu  
 Manish Gupta  
@@ -15,16 +16,17 @@ Pradeep Ramani
 Naila Farooqui  
 Piotr Majcher  
 Paul Springer  
-Jin Wang   
+Jin Wang  
 Aniket Shivam  
 Chinmay Talegaonkar  
-Shang Zhang   
-Scott Yokim      
+Shang Zhang  
+Scott Yokim  
 Markus Hohnerbach  
 Aditya Atluri  
-David Tanner  
-  
+David Tanner
+
 ## CONTRIBUTORS
+
 Timothy Costa  
 Julien Demouth  
 Brian Fahs  
@@ -44,9 +46,9 @@ Fung Xie
 Albert Xu  
 Jack Yang  
 Xiuxia Zhang  
-Nick Zhao  
+Nick Zhao
 
-## ACKNOWLEDGEMENTS
+## ACKNOWLEDGMENTS
 
 Girish Bharambe  
 Cris Cecka  
@@ -57,6 +59,4 @@ Rishkul Kulkarni
 Bryce Lelbach  
 Matthew Nicely  
 Joel McCormack  
-Kyrylo Perelygin  
-
-
+Kyrylo Perelygin

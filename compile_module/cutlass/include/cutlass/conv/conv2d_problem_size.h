@@ -28,11 +28,11 @@
     \brief This file contains definitions and utility functions for describing
   convolution problem sizes.
 
-  Conv2dProblem desciption:
+  Conv2dProblem description:
     activation (NHWC),
     filter (KRSC),
     output (NPQK),
-    pading (pad_h, pad_w),
+    padding (pad_h, pad_w),
     stride (stride_h, stride_w),
     dilation (dilation_h, dilation_w).
 
