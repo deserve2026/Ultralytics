@@ -394,7 +394,7 @@ template <typename T>
 CUTLASS_HOST_DEVICE complex<T> conj(complex<T> const& z) {
     return complex<T>(real(z), -imag(z));
 }
-/// Indentity transform for non-complex types
+/// Identity transform for non-complex types
 template <typename T>
 CUTLASS_HOST_DEVICE T conj(T const& z) {
     static_assert(!std::is_same<T, cuComplex>::value &&

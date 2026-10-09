@@ -95,7 +95,7 @@ void selective_scan_bwd_kernel(SSMParamsBwd params) {
         + dim_id * params.u_d_stride;
     input_t *delta = reinterpret_cast<input_t *>(params.delta_ptr) + batch_id * params.delta_batch_stride
         + dim_id * params.delta_d_stride;
-    input_t *dout = reinterpret_cast<input_t *>(params.dout_ptr) + batch_id * params.dout_batch_stride
+    input_t *doubt = reinterpret_cast<input_t *>(params.dout_ptr) + batch_id * params.dout_batch_stride
         + dim_id * params.dout_d_stride;
     weight_t A_val = reinterpret_cast<weight_t *>(params.A_ptr)[dim_id];
     constexpr float kLog2e = M_LOG2E;
@@ -120,7 +120,7 @@ void selective_scan_bwd_kernel(SSMParamsBwd params) {
     constexpr int kChunkSize = kNThreads * kNItems;
     u += (params.n_chunks - 1) * kChunkSize;
     delta += (params.n_chunks - 1) * kChunkSize;
-    dout += (params.n_chunks - 1) * kChunkSize;
+    doubt += (params.n_chunks - 1) * kChunkSize;
     Bvar += (params.n_chunks - 1) * kChunkSize;
     Cvar += (params.n_chunks - 1) * kChunkSize;
     for (int chunk = params.n_chunks - 1; chunk >= 0; --chunk) {
@@ -132,11 +132,11 @@ void selective_scan_bwd_kernel(SSMParamsBwd params) {
         __syncthreads();
         load_input<Ktraits>(delta, delta_vals_load, smem_load, params.seqlen - chunk * kChunkSize);
         __syncthreads();
-        load_input<Ktraits>(dout, dout_vals_load, smem_load, params.seqlen - chunk * kChunkSize);
+        load_input<Ktraits>(doubt, dout_vals_load, smem_load, params.seqlen - chunk * kChunkSize);
         u -= kChunkSize;
         // Will reload delta at the same location if kDeltaSoftplus
         if constexpr (!kDeltaSoftplus) { delta -= kChunkSize; }
-        dout -= kChunkSize;
+        doubt -= kChunkSize;
 
         float dout_vals[kNItems], delta_vals[kNItems];
         float du_vals[kNItems];
