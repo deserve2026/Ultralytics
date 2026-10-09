@@ -1,12 +1,12 @@
 import pytest
 import torch
 import torch.nn.functional as F
-
 from depthwise_conv2d_implicit_gemm import DepthWiseConv2dImplicitGEMM
 
 
 def torch_forward(x, w):
     return F.conv2d(x, w, padding=w.size(3) // 2, groups=w.size(0))
+
 
 def test_cuda_available():
     if not torch.cuda.is_available():

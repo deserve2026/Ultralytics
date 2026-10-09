@@ -206,7 +206,7 @@ public:
     /// type, this storage arrangement is to be considered 'gaussian complex' in
     /// the sense that the accumulation is done in three parts namely part1,
     /// part2, and part3. The parts 1, 2, and 3 are stored consecutively in
-    /// InteratorC::Frament. This matches the structure of Tensor Cores which
+    /// InteratorC::Fragment. This matches the structure of Tensor Cores which
     /// are always real-valued matrix multiplies.
     using FragmentC = typename IteratorC::Fragment;
 
