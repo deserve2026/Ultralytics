@@ -583,7 +583,7 @@ public:
     /// Constructs the GEMM.
     GemmComplex() {}
 
-    /// Helper to construct a transposed equivalent for the underying GEMM
+    /// Helper to construct a transposed equivalent for the underlying GEMM
     /// operator
     static UnderlyingArguments to_underlying_arguments(Arguments const& args) {
         return UnderlyingArguments(

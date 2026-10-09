@@ -234,7 +234,7 @@ Status cudnn_satisfies(library::ConvDescription const& desc,
     ////////////////////////  Convolution output dimensions p and q
     //////////////////////////
     // Cutlass convolutions support arbitrary output dimensions and not
-    // constriant by    // input, filter, padding, striding, dilation sizes. //
+    // constraint by    // input, filter, padding, striding, dilation sizes. //
     // cuDNN sets the output dimensions (p, q) using following equations: //
     //                                                                                   //
     // output = div_up(input + 2 * pad - ((filter - 1) * dilation + 1) + 1,
@@ -339,7 +339,7 @@ Status cudnn_satisfies(library::ConvDescription const& desc,
     ////////////////////////  Convolution output dimensions p and q
     //////////////////////////
     // Cutlass convolutions support arbitrary output dimensions and not
-    // constriant by    // input, filter, padding, striding, dilation sizes. //
+    // constraint by    // input, filter, padding, striding, dilation sizes. //
     // cuDNN sets the output dimensions (p, q) using following equations: //
     //                                                                                   //
     // output = div_up(input + 2 * pad - ((filter - 1) * dilation + 1) + 1,
