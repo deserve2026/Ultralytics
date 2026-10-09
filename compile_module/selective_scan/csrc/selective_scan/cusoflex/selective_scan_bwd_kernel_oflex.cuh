@@ -124,12 +124,12 @@ void selective_scan_bwd_kernel(SSMParamsBwd params) {
     float dD_val = 0;
     float ddelta_bias_val = 0;
 
-    output_t *dout = reinterpret_cast<output_t *>(params.dout_ptr) + batch_id * params.dout_batch_stride + dim_id * params.dout_d_stride;
+    output_t *doubt = reinterpret_cast<output_t *>(params.dout_ptr) + batch_id * params.dout_batch_stride + dim_id * params.dout_d_stride;
 
     constexpr int kChunkSize = kNThreads * kNItems;
     u += (params.n_chunks - 1) * kChunkSize;
     delta += (params.n_chunks - 1) * kChunkSize;
-    dout += (params.n_chunks - 1) * kChunkSize;
+    doubt += (params.n_chunks - 1) * kChunkSize;
     Bvar += (params.n_chunks - 1) * kChunkSize;
     Cvar += (params.n_chunks - 1) * kChunkSize;
     for (int chunk = params.n_chunks - 1; chunk >= 0; --chunk) {
@@ -143,16 +143,16 @@ void selective_scan_bwd_kernel(SSMParamsBwd params) {
         __syncthreads();
         if constexpr (std::is_same_v<output_t, input_t>) {
             input_t dout_vals_load[kNItems];
-            load_input<Ktraits>(reinterpret_cast<input_t *>(dout), dout_vals_load, smem_load, params.seqlen - chunk * kChunkSize);
+            load_input<Ktraits>(reinterpret_cast<input_t *>(doubt), dout_vals_load, smem_load, params.seqlen - chunk * kChunkSize);
             Converter<typename Ktraits::input_t, kNItems>::to_float(dout_vals_load, dout_vals);
         } else {
             static_assert(std::is_same_v<output_t, float>);
-            load_output<Ktraits>(dout, dout_vals, smem_load1, params.seqlen - chunk * kChunkSize);
+            load_output<Ktraits>(doubt, dout_vals, smem_load1, params.seqlen - chunk * kChunkSize);
         }
         u -= kChunkSize;
         // Will reload delta at the same location if kDeltaSoftplus
         if constexpr (!kDeltaSoftplus) { delta -= kChunkSize; }
-        dout -= kChunkSize;
+        doubt -= kChunkSize;
 
         float delta_vals[kNItems];
         float du_vals[kNItems];

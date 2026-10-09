@@ -194,7 +194,7 @@ struct KernelArgument {
 
     virtual ~KernelArgument();
 
-    /// Returns true if the kernel argument iself is empty
+    /// Returns true if the kernel argument itself is empty
     virtual bool not_null() const = 0;
 
     /// Returns a string name for debugging
@@ -265,7 +265,7 @@ struct ScalarArgument : public KernelArgument {
     // Data members
     //
 
-    /// Set of posible values
+    /// Set of possible values
     ValueCollection values;
 
     //
@@ -512,7 +512,7 @@ struct IntegerArgument : public KernelArgument {
     // Data members
     //
 
-    /// Set of posible values
+    /// Set of possible values
     RangeCollection ranges;
 
     //
