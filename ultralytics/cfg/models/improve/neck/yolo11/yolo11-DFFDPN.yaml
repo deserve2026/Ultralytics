@@ -34,7 +34,7 @@ head:
   - [[-1, 10], 1, Concat, [1]] # 13-P5/32
   - [-1, 2, C3k2, [512, True]] # 14-P5/32
 
-  - [11, 1, nn.Upsample, [None, 2, 'nearest']] # 15-P3/8
+  - [11, 1, nn.Upsample, [None, 2, "nearest"]] # 15-P3/8
   - [[-1, 4], 1, Concat, [1]] # 16-P3/8
   - [-1, 2, C3k2, [256, False]] # 17-P3/8
 
@@ -44,7 +44,7 @@ head:
   - [[12, 19, 14], 1, Concat, [1]] # 20-P5/32
   - [-1, 2, C3k2, [512, True]] # 21-P5/32
 
-  - [18, 1, nn.Upsample, [None, 2, 'nearest']] # 22-P3/8
+  - [18, 1, nn.Upsample, [None, 2, "nearest"]] # 22-P3/8
   - [[15, 22, 17], 1, Concat, [1]] # 23-P3/8
   - [-1, 2, C3k2, [256, False]] # 24-P3/8
 
