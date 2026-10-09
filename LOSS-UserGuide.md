@@ -231,37 +231,37 @@ LossConfig cls_loss=..., iou_loss=..., iou_aux=...; iou_family=..., iou_variant=
 
 以下 6 条示例可用最小数量覆盖大多数 loss 分支。你可以直接对照自己的训练日志，快速确认配置是否按预期生效。
 
-1) 基线默认（兼容原版）：
+1. 基线默认（兼容原版）：
 
 ```text
 LossConfig cls_loss=bce, iou_loss=ciou, iou_aux=none; iou_family=base, iou_variant=ciou
 ```
 
-2) Slide + Inner + GCD（覆盖 slide、inner、iou_aux_ratio）：
+2. Slide + Inner + GCD（覆盖 slide、inner、iou_aux_ratio）：
 
 ```text
 LossConfig cls_loss=slide, iou_loss=inner_diou, iou_aux=gcd; iou_family=inner, iou_variant=diou, slide_auto_iou_min=0.200, slide_delta=0.100, iou_aux_ratio=0.500, inner_iou_ratio=0.700
 ```
 
-3) EMA Slide + Focaler + NWD（覆盖 ema_*、focaler_*、iou_aux_ratio）：
+3. EMA Slide + Focaler + NWD（覆盖 ema__、focaler__、iou_aux_ratio）：
 
 ```text
 LossConfig cls_loss=ema_slide, iou_loss=focaler_siou, iou_aux=nwd; iou_family=focaler, iou_variant=siou, slide_auto_iou_min=0.200, slide_delta=0.100, ema_decay=0.999, ema_tau=2000.0, iou_aux_ratio=0.500, focaler_d=0.000, focaler_u=0.950
 ```
 
-4) Varifocal + MPDIoU（覆盖 varifocal、mpd 家族）：
+4. Varifocal + MPDIoU（覆盖 varifocal、mpd 家族）：
 
 ```text
 LossConfig cls_loss=varifocal, iou_loss=mpdiou, iou_aux=none; iou_family=mpd, iou_variant=mpdiou, varifocal_alpha=0.750, varifocal_gamma=2.000
 ```
 
-5) QualityFocal + Wise Inner（覆盖 qualityfocal、wise inner、wise monotonic）：
+5. QualityFocal + Wise Inner（覆盖 qualityfocal、wise inner、wise monotonic）：
 
 ```text
 LossConfig cls_loss=qualityfocal, iou_loss=wiseiou_inner_diou, iou_aux=none; iou_family=wise, iou_variant=diou, qfl_beta=2.000, inner_iou_ratio=0.700, wiseiou_monotonous=True
 ```
 
-6) Focal + Wise Focaler MPDIoU（覆盖 focal、wise focaler、wise+mpdiou）：
+6. Focal + Wise Focaler MPDIoU（覆盖 focal、wise focaler、wise+mpdiou）：
 
 ```text
 LossConfig cls_loss=focal, iou_loss=wiseiou_focaler_mpdiou, iou_aux=none; iou_family=wise, iou_variant=mpdiou, focal_gamma=1.500, focal_alpha=0.250, focaler_d=0.000, focaler_u=0.950, wiseiou_monotonous=False
