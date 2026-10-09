@@ -104,18 +104,18 @@ model.train(trainer=某个 AFSS Trainer, afss=True, ...)
 
 当前仓库中 AFSS 相关参数如下：
 
-| 参数 | 含义 | 默认值 |
-| --- | --- | --- |
-| `afss` | 是否启用 AFSS | `False` |
-| `afss_warmup_epochs` | warmup 轮数，warmup 期间使用全量数据 | `20` |
-| `afss_update_interval` | AFSS 刷新周期 | `5` |
-| `afss_easy_ratio` | easy 样本每轮采样比例 | `0.02` |
-| `afss_moderate_ratio` | moderate 样本每轮采样比例 | `0.40` |
-| `afss_easy_forced_gap` | easy 样本超过多少轮未被使用则强制回看 | `10` |
-| `afss_moderate_forced_gap` | moderate 样本超过多少轮未被使用则强制覆盖 | `3` |
-| `afss_conf` | AFSS 全量 train 评估时使用的置信度阈值 | `0.25` |
-| `afss_save_refresh_json` | 是否保存每次刷新后的调试 JSON | `False` |
-| `afss_thresholds` | 每个任务的 `[moderate_threshold, easy_threshold]` | `detect/obb/segment/pose = [0.55, 0.85]` |
+| 参数                       | 含义                                              | 默认值                                   |
+| -------------------------- | ------------------------------------------------- | ---------------------------------------- |
+| `afss`                     | 是否启用 AFSS                                     | `False`                                  |
+| `afss_warmup_epochs`       | warmup 轮数，warmup 期间使用全量数据              | `20`                                     |
+| `afss_update_interval`     | AFSS 刷新周期                                     | `5`                                      |
+| `afss_easy_ratio`          | easy 样本每轮采样比例                             | `0.02`                                   |
+| `afss_moderate_ratio`      | moderate 样本每轮采样比例                         | `0.40`                                   |
+| `afss_easy_forced_gap`     | easy 样本超过多少轮未被使用则强制回看             | `10`                                     |
+| `afss_moderate_forced_gap` | moderate 样本超过多少轮未被使用则强制覆盖         | `3`                                      |
+| `afss_conf`                | AFSS 全量 train 评估时使用的置信度阈值            | `0.25`                                   |
+| `afss_save_refresh_json`   | 是否保存每次刷新后的调试 JSON                     | `False`                                  |
+| `afss_thresholds`          | 每个任务的 `[moderate_threshold, easy_threshold]` | `detect/obb/segment/pose = [0.55, 0.85]` |
 
 参数定义位置：
 
@@ -167,8 +167,8 @@ model.train(trainer=AFSSDetectionTrainer, afss=True, ...)
 - Trainer：`ultralytics/models/yolo/detect/afss_train.py`
 - Evaluator：`ultralytics/models/yolo/detect/afss_val.py`
 - 测试：
-  - `tests/test_afss_detect_train.py`
-  - `tests/test_afss_detect_eval.py`
+    - `tests/test_afss_detect_train.py`
+    - `tests/test_afss_detect_eval.py`
 
 ---
 
@@ -204,8 +204,8 @@ model.train(
 - Trainer：`ultralytics/models/yolo/segment/afss_train.py`
 - Evaluator：`ultralytics/models/yolo/segment/afss_val.py`
 - 原始基类：
-  - `ultralytics/models/yolo/segment/train.py`
-  - `ultralytics/models/yolo/segment/val.py`
+    - `ultralytics/models/yolo/segment/train.py`
+    - `ultralytics/models/yolo/segment/val.py`
 - 测试：`tests/test_afss_segment.py`
 
 ---
@@ -242,8 +242,8 @@ model.train(
 - Trainer：`ultralytics/models/yolo/pose/afss_train.py`
 - Evaluator：`ultralytics/models/yolo/pose/afss_val.py`
 - 原始基类：
-  - `ultralytics/models/yolo/pose/train.py`
-  - `ultralytics/models/yolo/pose/val.py`
+    - `ultralytics/models/yolo/pose/train.py`
+    - `ultralytics/models/yolo/pose/val.py`
 - 测试：`tests/test_afss_pose.py`
 
 ---
@@ -280,8 +280,8 @@ model.train(
 - Trainer：`ultralytics/models/yolo/obb/afss_train.py`
 - Evaluator：`ultralytics/models/yolo/obb/afss_val.py`
 - 原始基类：
-  - `ultralytics/models/yolo/obb/train.py`
-  - `ultralytics/models/yolo/obb/val.py`
+    - `ultralytics/models/yolo/obb/train.py`
+    - `ultralytics/models/yolo/obb/val.py`
 - 测试：`tests/test_afss_obb.py`
 
 ---
@@ -389,17 +389,17 @@ else:
 这意味着几个重要边界情况：
 
 1. 背景图像，没有 GT，也没有预测：
-   - `precision = 1.0`
-   - `recall = 1.0`
+    - `precision = 1.0`
+    - `recall = 1.0`
 
 2. 有 GT，但模型一个也没预测出来：
-   - `precision = 0.0`
-   - `recall = 0.0`
+    - `precision = 0.0`
+    - `recall = 0.0`
 
 3. 没有 GT，但模型预测出目标：
-   - `recall = 1.0`
-   - `precision = matched_pred / num_pred`
-   - 如果这些预测全是误报，通常 precision 会接近 `0.0`
+    - `recall = 1.0`
+    - `precision = matched_pred / num_pred`
+    - 如果这些预测全是误报，通常 precision 会接近 `0.0`
 
 ---
 
@@ -533,7 +533,7 @@ AFSS OBB evaluator 在：
     "mask": {
         "precision": ...,
         "recall": ...,
-    }
+    },
 }
 ```
 
@@ -600,7 +600,7 @@ matched_mask = int(processed["tp_m"][:, 0].sum()) if processed["tp_m"].size else
     "pose": {
         "precision": ...,
         "recall": ...,
-    }
+    },
 }
 ```
 
@@ -704,22 +704,22 @@ selected = {state.im_file for state in grouped["hard"]}
 easy 样本有两种进入活跃集的方式：
 
 1. 强制回看：
-   - 如果 `current_epoch - last_used_epoch >= afss_easy_forced_gap`
-   - 则必须回到活跃集
+    - 如果 `current_epoch - last_used_epoch >= afss_easy_forced_gap`
+    - 则必须回到活跃集
 
 2. 按比例采样：
-   - 采样数为 `ceil(len(easy_bucket) * afss_easy_ratio)`
+    - 采样数为 `ceil(len(easy_bucket) * afss_easy_ratio)`
 
 ### 16.3 moderate 样本
 
 moderate 样本也有两种进入活跃集的方式：
 
 1. 强制覆盖：
-   - 如果 `current_epoch - last_used_epoch >= afss_moderate_forced_gap`
-   - 则必须进入活跃集
+    - 如果 `current_epoch - last_used_epoch >= afss_moderate_forced_gap`
+    - 则必须进入活跃集
 
 2. 按比例采样：
-   - 采样数为 `ceil(len(moderate_bucket) * afss_moderate_ratio)`
+    - 采样数为 `ceil(len(moderate_bucket) * afss_moderate_ratio)`
 
 ### 16.4 排序规则
 
@@ -728,7 +728,7 @@ moderate 样本也有两种进入活跃集的方式：
 排序函数：
 
 ```python
-key=lambda state: (-(current_epoch - state.last_used_epoch), state.im_file)
+key = lambda state: (-(current_epoch - state.last_used_epoch), state.im_file)
 ```
 
 也就是说：
@@ -787,20 +787,20 @@ AFSS 运行时会在：
 常见文件包括：
 
 - `state.json`
-  - 当前 AFSS 全量状态快照
+    - 当前 AFSS 全量状态快照
 - `train_epoch000X.txt`
-  - 某次刷新后生成的活跃训练列表
+    - 某次刷新后生成的活跃训练列表
 - `refresh_epoch000X.json`
-  - 当 `afss_save_refresh_json=True` 时生成的详细刷新记录
+    - 当 `afss_save_refresh_json=True` 时生成的详细刷新记录
 
 对应实现位置：
 
 - 状态读写：`ultralytics/afss/io.py`
 - trainer 内的保存恢复：
-  - `ultralytics/models/yolo/detect/afss_train.py`
-  - `ultralytics/models/yolo/obb/afss_train.py`
-  - `ultralytics/models/yolo/segment/afss_train.py`
-  - `ultralytics/models/yolo/pose/afss_train.py`
+    - `ultralytics/models/yolo/detect/afss_train.py`
+    - `ultralytics/models/yolo/obb/afss_train.py`
+    - `ultralytics/models/yolo/segment/afss_train.py`
+    - `ultralytics/models/yolo/pose/afss_train.py`
 
 ### 17.3 refresh JSON 里有什么
 
@@ -948,19 +948,19 @@ self.train_loader = self.get_dataloader(str(list_path), ...)
 如果你是第一次接触这个实现，建议按下面顺序阅读：
 
 1. `train_afss.py`
-   - 先看如何显式启用 AFSS。
+    - 先看如何显式启用 AFSS。
 2. `ultralytics/cfg/default.yaml`
-   - 了解所有 AFSS 参数。
+    - 了解所有 AFSS 参数。
 3. `ultralytics/models/yolo/detect/afss_train.py`
-   - 看完整主流程，detect 是所有任务的基线实现。
+    - 看完整主流程，detect 是所有任务的基线实现。
 4. `ultralytics/afss/scheduler.py`
-   - 看 easy / moderate / hard 的分桶和采样规则。
+    - 看 easy / moderate / hard 的分桶和采样规则。
 5. `ultralytics/afss/adapters.py`
-   - 看四个任务的 `task_score` 定义。
+    - 看四个任务的 `task_score` 定义。
 6. 各任务 `afss_val.py`
-   - 看每个任务的图像级指标是怎么聚合出来的。
+    - 看每个任务的图像级指标是怎么聚合出来的。
 7. 各任务测试文件
-   - 用测试反向理解设计边界与预期行为。
+    - 用测试反向理解设计边界与预期行为。
 
 ---
 

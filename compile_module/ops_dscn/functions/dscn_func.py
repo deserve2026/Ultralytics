@@ -3,29 +3,38 @@
 # https://github.com/OpenGVLab/InternImage
 # --------------------------------------------------------
 
-from __future__ import absolute_import
-from __future__ import print_function
-from __future__ import division
 
-import torch
-import torch.nn.functional as F
+import DSCN
+import pkg_resources
 from torch.autograd import Function
 from torch.autograd.function import once_differentiable
 from torch.cuda.amp import custom_bwd, custom_fwd
-import DSCN
 
-import pkg_resources
-dscn_version = float(pkg_resources.get_distribution('DSCN').version)
+dscn_version = float(pkg_resources.get_distribution("DSCN").version)
 
 
 class DSCNFunction(Function):
     @staticmethod
     @custom_fwd
     def forward(
-            ctx, input, offset,
-            kernel_h, kernel_w, stride_h, stride_w,
-            pad_h, pad_w, dilation_h, dilation_w,
-            group, group_channels, offset_scale, im2col_step, remove_center, on_x):
+        ctx,
+        input,
+        offset,
+        kernel_h,
+        kernel_w,
+        stride_h,
+        stride_w,
+        pad_h,
+        pad_w,
+        dilation_h,
+        dilation_w,
+        group,
+        group_channels,
+        offset_scale,
+        im2col_step,
+        remove_center,
+        on_x,
+    ):
         ctx.kernel_h = kernel_h
         ctx.kernel_w = kernel_w
         ctx.stride_h = stride_h
@@ -42,11 +51,22 @@ class DSCNFunction(Function):
         ctx.on_x = on_x
 
         args = [
-            input, offset, kernel_h,
-            kernel_w, stride_h, stride_w, pad_h,
-            pad_w, dilation_h, dilation_w, group,
-            group_channels, offset_scale, ctx.im2col_step,
-            ctx.remove_center, ctx.on_x
+            input,
+            offset,
+            kernel_h,
+            kernel_w,
+            stride_h,
+            stride_w,
+            pad_h,
+            pad_w,
+            dilation_h,
+            dilation_w,
+            group,
+            group_channels,
+            offset_scale,
+            ctx.im2col_step,
+            ctx.remove_center,
+            ctx.on_x,
         ]
 
         output = DSCN.dscn_forward(*args)
@@ -61,30 +81,72 @@ class DSCNFunction(Function):
         input, offset = ctx.saved_tensors
 
         args = [
-            input, offset, ctx.kernel_h,
-            ctx.kernel_w, ctx.stride_h, ctx.stride_w, ctx.pad_h,
-            ctx.pad_w, ctx.dilation_h, ctx.dilation_w, ctx.group,
-            ctx.group_channels, ctx.offset_scale, grad_output.contiguous(), ctx.im2col_step,
-            ctx.remove_center, ctx.on_x
+            input,
+            offset,
+            ctx.kernel_h,
+            ctx.kernel_w,
+            ctx.stride_h,
+            ctx.stride_w,
+            ctx.pad_h,
+            ctx.pad_w,
+            ctx.dilation_h,
+            ctx.dilation_w,
+            ctx.group,
+            ctx.group_channels,
+            ctx.offset_scale,
+            grad_output.contiguous(),
+            ctx.im2col_step,
+            ctx.remove_center,
+            ctx.on_x,
         ]
 
-        grad_input, grad_offset = \
-            DSCN.dscn_backward(*args)
+        grad_input, grad_offset = DSCN.dscn_backward(*args)
 
-        return grad_input, grad_offset, \
-            None, None, None, None, None, None, None, None, None, None, None, None, None, None
+        return (
+            grad_input,
+            grad_offset,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+        )
 
     @staticmethod
-    def symbolic(g, input, offset, kernel_h, kernel_w, stride_h,
-                 stride_w, pad_h, pad_w, dilation_h, dilation_w, group,
-                 group_channels, offset_scale, im2col_step, remove_center):
+    def symbolic(
+        g,
+        input,
+        offset,
+        kernel_h,
+        kernel_w,
+        stride_h,
+        stride_w,
+        pad_h,
+        pad_w,
+        dilation_h,
+        dilation_w,
+        group,
+        group_channels,
+        offset_scale,
+        im2col_step,
+        remove_center,
+    ):
         """Symbolic function for mmdeploy::DSCN.
 
         Returns:
             DSCN op for onnx.
         """
         return g.op(
-            'mmdeploy::TRTDSCN',
+            "mmdeploy::TRTDSCN",
             input,
             offset,
             kernel_h_i=int(kernel_h),
