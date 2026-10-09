@@ -8,4 +8,3 @@ Compile and install `depthwise_conv2d_implicit_gemm`
 ```
 ./setup.py install --user
 ```
-
