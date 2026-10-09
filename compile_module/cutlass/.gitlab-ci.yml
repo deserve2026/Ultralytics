@@ -29,7 +29,7 @@ stages:
     EXPECTED_GPU: 1
     EXPECTED_MEMORY: 61440
     POSITIVE_TAGS: 2080ti
-  
+
 check:
   stage: check
   tags:
@@ -65,5 +65,3 @@ cutlass_test:
     - source ./ci/setup_cuda.sh
     - ./ci/cmake_cutlass.sh
     - ./ci/run_cutlass_test.sh
-
-

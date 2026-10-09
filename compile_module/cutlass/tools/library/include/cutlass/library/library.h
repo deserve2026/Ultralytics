@@ -1040,7 +1040,7 @@ struct ConvArguments {
     /// pointer to implicit gemm matrix C
     void const* C;
 
-    /// pointer to implicit gemm desitination matrix D
+    /// pointer to implicit gemm destination matrix D
     void* D;
 
     /// Host or device pointer to alpha scalar
