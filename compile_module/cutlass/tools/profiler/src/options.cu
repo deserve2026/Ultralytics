@@ -184,7 +184,7 @@ Options::Initialization::Initialization(cutlass::CommandLine const& cmdline) {
         } else if (provider != library::Provider::kReferenceHost &&
                    provider != library::Provider::kReferenceDevice) {
             throw std::runtime_error(
-                    "Unsupported intialization provider specified.");
+                    "Unsupported initialization provider specified.");
         }
     } else {
         provider = library::Provider::kReferenceDevice;
@@ -198,7 +198,7 @@ Options::Initialization::Initialization(cutlass::CommandLine const& cmdline) {
         // set user provided data distribution
         get_distribution(cmdline, "dist", data_distribution);
     } else {
-        // profiler choosen data distribution (allowed to change based on
+        // profiler chosen data distribution (allowed to change based on
         // numeric types)
         fix_data_distribution = false;
         // set uniform data distribution with range [-4, 4]

@@ -509,7 +509,7 @@ function(cutlass_add_executable_tests NAME TARGET)
 # TARGET: The target corresponding to the executable under test.
 # DISABLE_EXECUTABLE_INSTALL_RULE: An option, if given, that disables creating an install rule for TARGET.
 # DEPENDS: A list of targets or files on which this test is dependent.
-# DEPENDEES: A list of targets which should depend on this test.
+# DEPENDENCIES: A list of targets which should depend on this test.
 # TEST_COMMAND_OPTIONS: A list of variables (i.e. by reference params) which contain command line arguments
 #   to pass to the test executable. A unique test with suffix _0, _1, ... is generated for each set of 
 #   options given. If this option is not used, a single test with no arguments is generated.
@@ -517,7 +517,7 @@ function(cutlass_add_executable_tests NAME TARGET)
 
   set(options DISABLE_EXECUTABLE_INSTALL_RULE)
   set(oneValueArgs)
-  set(multiValueArgs DEPENDS DEPENDEES TEST_COMMAND_OPTIONS)
+  set(multiValueArgs DEPENDS DEPENDENCIES TEST_COMMAND_OPTIONS)
   cmake_parse_arguments(_ "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
     
   if (NOT __DISABLE_EXECUTABLE_INSTALL_RULE AND CUTLASS_INSTALL_TESTS)
