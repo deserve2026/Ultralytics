@@ -28,11 +28,11 @@
     \brief This file contains definitions and utility functions for describing
   convolution problem sizes.
 
-  Conv3dProblem desciption:
+  Conv3dProblem description:
     activation (NDHWC),
     filter (KTRSC),
     output (NZPQK),
-    pading (pad_d, pad_h, pad_w),
+    padding (pad_d, pad_h, pad_w),
     stride (stride_d, stride_h, stride_w),
     dilation (dilation_d, dilation_h, dilation_w).
 

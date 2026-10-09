@@ -1,451 +1,503 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="zh-CN">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>AI目标检测系统</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
     <style>
-        body {
-            font-family: 'Inter', sans-serif;
-        }
+      body {
+        font-family: "Inter", sans-serif;
+      }
 
-        .range-input {
-            -webkit-appearance: none;
-            appearance: none;
-            width: 100%;
-            height: 4px;
-            border-radius: 9999px;
-            background: linear-gradient(90deg, #4f46e5 0%, #7c3aed 100%);
-            outline: none;
-        }
+      .range-input {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 100%;
+        height: 4px;
+        border-radius: 9999px;
+        background: linear-gradient(90deg, #4f46e5 0%, #7c3aed 100%);
+        outline: none;
+      }
 
-        .range-input::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            appearance: none;
-            width: 16px;
-            height: 16px;
-            border-radius: 9999px;
-            background: #4f46e5;
-            border: 2px solid #ffffff;
-            box-shadow: 0 1px 2px rgba(15, 23, 42, 0.25);
-            cursor: pointer;
-        }
+      .range-input::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 16px;
+        height: 16px;
+        border-radius: 9999px;
+        background: #4f46e5;
+        border: 2px solid #ffffff;
+        box-shadow: 0 1px 2px rgba(15, 23, 42, 0.25);
+        cursor: pointer;
+      }
 
-        .range-input::-moz-range-thumb {
-            width: 16px;
-            height: 16px;
-            border-radius: 9999px;
-            background: #4f46e5;
-            border: 2px solid #ffffff;
-            box-shadow: 0 1px 2px rgba(15, 23, 42, 0.25);
-            cursor: pointer;
-        }
+      .range-input::-moz-range-thumb {
+        width: 16px;
+        height: 16px;
+        border-radius: 9999px;
+        background: #4f46e5;
+        border: 2px solid #ffffff;
+        box-shadow: 0 1px 2px rgba(15, 23, 42, 0.25);
+        cursor: pointer;
+      }
 
-        .preview-content img,
-        .preview-content video {
-            max-width: 100%;
-            max-height: 100%;
-            object-fit: contain;
-            border-radius: 0.75rem;
-        }
+      .preview-content img,
+      .preview-content video {
+        max-width: 100%;
+        max-height: 100%;
+        object-fit: contain;
+        border-radius: 0.75rem;
+      }
 
-        .loading {
-            display: none;
-        }
+      .loading {
+        display: none;
+      }
 
-        .loading.active {
-            display: flex;
-        }
+      .loading.active {
+        display: flex;
+      }
     </style>
-</head>
-<body class="bg-slate-50 text-slate-800 min-h-screen p-4 md:p-6">
+  </head>
+  <body class="bg-slate-50 text-slate-800 min-h-screen p-4 md:p-6">
     <div class="max-w-7xl mx-auto bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
-        <header class="relative border-b border-slate-200 px-6 py-5 md:px-8 md:py-6">
-            <h1 class="text-2xl md:text-3xl font-extrabold tracking-tight bg-gradient-to-r from-indigo-600 via-purple-600 to-fuchsia-600 bg-clip-text text-transparent">AI 目标检测系统</h1>
-            <p class="text-sm md:text-base text-slate-500 mt-1">基于深度学习的智能目标识别平台</p>
-            <div class="absolute inset-x-0 bottom-0 h-[2px] bg-gradient-to-r from-indigo-500 via-purple-500 to-fuchsia-500"></div>
-        </header>
+      <header class="relative border-b border-slate-200 px-6 py-5 md:px-8 md:py-6">
+        <h1
+          class="text-2xl md:text-3xl font-extrabold tracking-tight bg-gradient-to-r from-indigo-600 via-purple-600 to-fuchsia-600 bg-clip-text text-transparent"
+        >
+          AI 目标检测系统
+        </h1>
+        <p class="text-sm md:text-base text-slate-500 mt-1">基于深度学习的智能目标识别平台</p>
+        <div
+          class="absolute inset-x-0 bottom-0 h-[2px] bg-gradient-to-r from-indigo-500 via-purple-500 to-fuchsia-500"
+        ></div>
+      </header>
 
-        <main class="grid grid-cols-1 lg:grid-cols-[340px_1fr] min-h-[680px]">
-            <aside class="bg-slate-50/80 border-r border-slate-200 p-6 space-y-6">
-                <div class="flex items-center justify-between rounded-lg border border-slate-200 bg-white px-3 py-2">
-                    <span class="text-sm font-medium text-slate-600">模型状态</span>
-                    <div id="modelStatus" class="inline-flex items-center gap-2 text-sm font-semibold text-amber-700">
-                        <span id="modelStatusDot" class="h-2.5 w-2.5 rounded-full bg-amber-500"></span>
-                        <span id="modelStatusText" class="text-amber-700 font-semibold">等待加载</span>
-                    </div>
-                </div>
+      <main class="grid grid-cols-1 lg:grid-cols-[340px_1fr] min-h-[680px]">
+        <aside class="bg-slate-50/80 border-r border-slate-200 p-6 space-y-6">
+          <div class="flex items-center justify-between rounded-lg border border-slate-200 bg-white px-3 py-2">
+            <span class="text-sm font-medium text-slate-600">模型状态</span>
+            <div id="modelStatus" class="inline-flex items-center gap-2 text-sm font-semibold text-amber-700">
+              <span id="modelStatusDot" class="h-2.5 w-2.5 rounded-full bg-amber-500"></span>
+              <span id="modelStatusText" class="text-amber-700 font-semibold">等待加载</span>
+            </div>
+          </div>
 
-                <section class="space-y-3">
-                    <h3 class="text-sm font-semibold text-slate-800">模型管理</h3>
-                    <div class="file-input-wrapper">
-                        <button class="w-full inline-flex items-center justify-center rounded-lg border border-slate-200 bg-white px-4 py-2.5 text-sm font-medium text-slate-700 hover:border-indigo-300 hover:text-indigo-600 hover:bg-indigo-50/40 active:bg-indigo-50 transition" onclick="document.getElementById('modelInput').click()">
-                            选择并加载模型
-                        </button>
-                        <input type="file" id="modelInput" class="hidden" accept=".pt,.pth,.onnx,.weights">
-                    </div>
-                    <div class="rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs text-slate-500 break-all">
-                        当前模型路径：<span id="modelPath" class="text-slate-700 font-medium">未加载</span>
-                    </div>
-                </section>
+          <section class="space-y-3">
+            <h3 class="text-sm font-semibold text-slate-800">模型管理</h3>
+            <div class="file-input-wrapper">
+              <button
+                class="w-full inline-flex items-center justify-center rounded-lg border border-slate-200 bg-white px-4 py-2.5 text-sm font-medium text-slate-700 hover:border-indigo-300 hover:text-indigo-600 hover:bg-indigo-50/40 active:bg-indigo-50 transition"
+                onclick="document.getElementById('modelInput').click()"
+              >
+                选择并加载模型
+              </button>
+              <input type="file" id="modelInput" class="hidden" accept=".pt,.pth,.onnx,.weights" />
+            </div>
+            <div class="rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs text-slate-500 break-all">
+              当前模型路径：<span id="modelPath" class="text-slate-700 font-medium">未加载</span>
+            </div>
+          </section>
 
-                <section class="space-y-3">
-                    <h3 class="text-sm font-semibold text-slate-800">文件上传</h3>
-                    <div class="file-input-wrapper">
-                        <button class="w-full inline-flex items-center justify-center rounded-lg border border-slate-200 bg-white px-4 py-2.5 text-sm font-medium text-slate-700 hover:border-indigo-300 hover:text-indigo-600 hover:bg-indigo-50/40 active:bg-indigo-50 transition" onclick="document.getElementById('imageInput').click()">
-                            选择图片
-                        </button>
-                        <input type="file" id="imageInput" class="hidden" accept="image/*">
-                    </div>
-                    <div class="file-input-wrapper">
-                        <button class="w-full inline-flex items-center justify-center rounded-lg border border-slate-200 bg-white px-4 py-2.5 text-sm font-medium text-slate-700 hover:border-indigo-300 hover:text-indigo-600 hover:bg-indigo-50/40 active:bg-indigo-50 transition" onclick="document.getElementById('videoInput').click()">
-                            选择视频
-                        </button>
-                        <input type="file" id="videoInput" class="hidden" accept="video/*">
-                    </div>
-                </section>
+          <section class="space-y-3">
+            <h3 class="text-sm font-semibold text-slate-800">文件上传</h3>
+            <div class="file-input-wrapper">
+              <button
+                class="w-full inline-flex items-center justify-center rounded-lg border border-slate-200 bg-white px-4 py-2.5 text-sm font-medium text-slate-700 hover:border-indigo-300 hover:text-indigo-600 hover:bg-indigo-50/40 active:bg-indigo-50 transition"
+                onclick="document.getElementById('imageInput').click()"
+              >
+                选择图片
+              </button>
+              <input type="file" id="imageInput" class="hidden" accept="image/*" />
+            </div>
+            <div class="file-input-wrapper">
+              <button
+                class="w-full inline-flex items-center justify-center rounded-lg border border-slate-200 bg-white px-4 py-2.5 text-sm font-medium text-slate-700 hover:border-indigo-300 hover:text-indigo-600 hover:bg-indigo-50/40 active:bg-indigo-50 transition"
+                onclick="document.getElementById('videoInput').click()"
+              >
+                选择视频
+              </button>
+              <input type="file" id="videoInput" class="hidden" accept="video/*" />
+            </div>
+          </section>
 
-                <section class="space-y-4">
-                    <h3 class="text-sm font-semibold text-slate-800">参数调整</h3>
-                    <div>
-                        <div class="mb-2 flex items-center justify-between text-sm">
-                            <span class="text-slate-600">置信度阈值</span>
-                            <span id="confValue" class="font-semibold text-indigo-600">0.50</span>
-                        </div>
-                        <input type="range" id="confSlider" class="range-input accent-indigo-600" min="0" max="100" value="50">
-                    </div>
-                    <div>
-                        <div class="mb-2 flex items-center justify-between text-sm">
-                            <span class="text-slate-600">IOU阈值</span>
-                            <span id="iouValue" class="font-semibold text-indigo-600">0.45</span>
-                        </div>
-                        <input type="range" id="iouSlider" class="range-input accent-indigo-600" min="0" max="100" value="45">
-                    </div>
-                </section>
+          <section class="space-y-4">
+            <h3 class="text-sm font-semibold text-slate-800">参数调整</h3>
+            <div>
+              <div class="mb-2 flex items-center justify-between text-sm">
+                <span class="text-slate-600">置信度阈值</span>
+                <span id="confValue" class="font-semibold text-indigo-600">0.50</span>
+              </div>
+              <input type="range" id="confSlider" class="range-input accent-indigo-600" min="0" max="100" value="50" />
+            </div>
+            <div>
+              <div class="mb-2 flex items-center justify-between text-sm">
+                <span class="text-slate-600">IOU阈值</span>
+                <span id="iouValue" class="font-semibold text-indigo-600">0.45</span>
+              </div>
+              <input type="range" id="iouSlider" class="range-input accent-indigo-600" min="0" max="100" value="45" />
+            </div>
+          </section>
 
-                <section class="space-y-3 pt-1">
-                    <button class="w-full inline-flex items-center justify-center rounded-lg bg-gradient-to-r from-indigo-600 to-purple-600 px-4 py-2.5 text-sm font-semibold text-white shadow-lg shadow-indigo-500/30 hover:from-indigo-500 hover:to-purple-500 transition disabled:opacity-50 disabled:cursor-not-allowed" id="detectBtn" disabled>
-                        开始检测
-                    </button>
-                    <button class="w-full inline-flex items-center justify-center rounded-lg border border-slate-200 bg-white px-4 py-2.5 text-sm font-medium text-slate-700 hover:border-indigo-300 hover:text-indigo-600 hover:bg-indigo-50/40 active:bg-indigo-50 transition disabled:opacity-50 disabled:cursor-not-allowed" id="downloadBtn" disabled>
-                        下载结果
-                    </button>
-                </section>
-            </aside>
+          <section class="space-y-3 pt-1">
+            <button
+              class="w-full inline-flex items-center justify-center rounded-lg bg-gradient-to-r from-indigo-600 to-purple-600 px-4 py-2.5 text-sm font-semibold text-white shadow-lg shadow-indigo-500/30 hover:from-indigo-500 hover:to-purple-500 transition disabled:opacity-50 disabled:cursor-not-allowed"
+              id="detectBtn"
+              disabled
+            >
+              开始检测
+            </button>
+            <button
+              class="w-full inline-flex items-center justify-center rounded-lg border border-slate-200 bg-white px-4 py-2.5 text-sm font-medium text-slate-700 hover:border-indigo-300 hover:text-indigo-600 hover:bg-indigo-50/40 active:bg-indigo-50 transition disabled:opacity-50 disabled:cursor-not-allowed"
+              id="downloadBtn"
+              disabled
+            >
+              下载结果
+            </button>
+          </section>
+        </aside>
 
-            <section class="p-6 md:p-8 space-y-6">
-                <div class="grid grid-cols-1 xl:grid-cols-2 gap-5">
-                    <div class="rounded-xl bg-white shadow-md border border-slate-200 p-4">
-                        <h3 class="text-sm font-semibold text-slate-700 mb-3">原始输入</h3>
-                        <div class="preview-content min-h-[360px] bg-slate-50 rounded-xl border border-slate-200 flex items-center justify-center" id="inputPreview">
-                            <div class="text-slate-400 text-sm">请上传图片或视频</div>
-                        </div>
-                    </div>
-                    <div class="rounded-xl bg-white shadow-md border border-slate-200 p-4">
-                        <h3 class="text-sm font-semibold text-slate-700 mb-3">检测结果</h3>
-                        <div class="preview-content min-h-[360px] bg-slate-50 rounded-xl border border-slate-200 flex items-center justify-center" id="outputPreview">
-                            <div class="text-slate-400 text-sm">等待检测...</div>
-                        </div>
-                    </div>
-                </div>
+        <section class="p-6 md:p-8 space-y-6">
+          <div class="grid grid-cols-1 xl:grid-cols-2 gap-5">
+            <div class="rounded-xl bg-white shadow-md border border-slate-200 p-4">
+              <h3 class="text-sm font-semibold text-slate-700 mb-3">原始输入</h3>
+              <div
+                class="preview-content min-h-[360px] bg-slate-50 rounded-xl border border-slate-200 flex items-center justify-center"
+                id="inputPreview"
+              >
+                <div class="text-slate-400 text-sm">请上传图片或视频</div>
+              </div>
+            </div>
+            <div class="rounded-xl bg-white shadow-md border border-slate-200 p-4">
+              <h3 class="text-sm font-semibold text-slate-700 mb-3">检测结果</h3>
+              <div
+                class="preview-content min-h-[360px] bg-slate-50 rounded-xl border border-slate-200 flex items-center justify-center"
+                id="outputPreview"
+              >
+                <div class="text-slate-400 text-sm">等待检测...</div>
+              </div>
+            </div>
+          </div>
 
-                <div class="loading items-center gap-3 rounded-lg border border-indigo-100 bg-indigo-50 px-4 py-3" id="loadingIndicator">
-                    <div class="h-5 w-5 border-2 border-indigo-200 border-t-indigo-600 rounded-full animate-spin"></div>
-                    <p id="loadingText" class="text-sm font-medium text-indigo-700">正在处理中，请稍候...</p>
-                </div>
+          <div
+            class="loading items-center gap-3 rounded-lg border border-indigo-100 bg-indigo-50 px-4 py-3"
+            id="loadingIndicator"
+          >
+            <div class="h-5 w-5 border-2 border-indigo-200 border-t-indigo-600 rounded-full animate-spin"></div>
+            <p id="loadingText" class="text-sm font-medium text-indigo-700">正在处理中，请稍候...</p>
+          </div>
 
-                <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
-                    <div class="rounded-xl border border-blue-200 bg-blue-50 p-4 shadow-sm">
-                        <div class="flex items-center gap-2 mb-2">
-                            <span class="inline-flex items-center justify-center h-7 w-7 rounded-md bg-blue-100 text-blue-600">
-                                <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16v16H4z"/><path d="M9 9h6v6H9z"/></svg>
-                            </span>
-                            <span class="text-xs font-medium text-slate-500">检测对象</span>
-                        </div>
-                        <div class="text-2xl font-extrabold text-slate-800" id="statObjects">0</div>
-                    </div>
-                    <div class="rounded-xl border border-emerald-200 bg-emerald-50 p-4 shadow-sm">
-                        <div class="flex items-center gap-2 mb-2">
-                            <span class="inline-flex items-center justify-center h-7 w-7 rounded-md bg-emerald-100 text-emerald-600">
-                                <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 7l9-4 9 4-9 4-9-4z"/><path d="M3 17l9 4 9-4"/><path d="M3 12l9 4 9-4"/></svg>
-                            </span>
-                            <span class="text-xs font-medium text-slate-500">类别数量</span>
-                        </div>
-                        <div class="text-2xl font-extrabold text-slate-800" id="statClasses">0</div>
-                    </div>
-                    <div class="rounded-xl border border-amber-200 bg-amber-50 p-4 shadow-sm">
-                        <div class="flex items-center gap-2 mb-2">
-                            <span class="inline-flex items-center justify-center h-7 w-7 rounded-md bg-amber-100 text-amber-600">
-                                <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
-                            </span>
-                            <span class="text-xs font-medium text-slate-500">处理时间</span>
-                        </div>
-                        <div class="text-2xl font-extrabold text-slate-800" id="statTime">0ms</div>
-                    </div>
-                    <div class="rounded-xl border border-rose-200 bg-rose-50 p-4 shadow-sm">
-                        <div class="flex items-center gap-2 mb-2">
-                            <span class="inline-flex items-center justify-center h-7 w-7 rounded-md bg-rose-100 text-rose-600">
-                                <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h3l3-8 4 16 3-8h5"/></svg>
-                            </span>
-                            <span class="text-xs font-medium text-slate-500">平均置信度</span>
-                        </div>
-                        <div class="text-2xl font-extrabold text-slate-800" id="statConf">0%</div>
-                    </div>
-                </div>
-            </section>
-        </main>
+          <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+            <div class="rounded-xl border border-blue-200 bg-blue-50 p-4 shadow-sm">
+              <div class="flex items-center gap-2 mb-2">
+                <span class="inline-flex items-center justify-center h-7 w-7 rounded-md bg-blue-100 text-blue-600">
+                  <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M4 4h16v16H4z" />
+                    <path d="M9 9h6v6H9z" />
+                  </svg>
+                </span>
+                <span class="text-xs font-medium text-slate-500">检测对象</span>
+              </div>
+              <div class="text-2xl font-extrabold text-slate-800" id="statObjects">0</div>
+            </div>
+            <div class="rounded-xl border border-emerald-200 bg-emerald-50 p-4 shadow-sm">
+              <div class="flex items-center gap-2 mb-2">
+                <span
+                  class="inline-flex items-center justify-center h-7 w-7 rounded-md bg-emerald-100 text-emerald-600"
+                >
+                  <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M3 7l9-4 9 4-9 4-9-4z" />
+                    <path d="M3 17l9 4 9-4" />
+                    <path d="M3 12l9 4 9-4" />
+                  </svg>
+                </span>
+                <span class="text-xs font-medium text-slate-500">类别数量</span>
+              </div>
+              <div class="text-2xl font-extrabold text-slate-800" id="statClasses">0</div>
+            </div>
+            <div class="rounded-xl border border-amber-200 bg-amber-50 p-4 shadow-sm">
+              <div class="flex items-center gap-2 mb-2">
+                <span class="inline-flex items-center justify-center h-7 w-7 rounded-md bg-amber-100 text-amber-600">
+                  <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="9" />
+                    <path d="M12 7v5l3 3" />
+                  </svg>
+                </span>
+                <span class="text-xs font-medium text-slate-500">处理时间</span>
+              </div>
+              <div class="text-2xl font-extrabold text-slate-800" id="statTime">0ms</div>
+            </div>
+            <div class="rounded-xl border border-rose-200 bg-rose-50 p-4 shadow-sm">
+              <div class="flex items-center gap-2 mb-2">
+                <span class="inline-flex items-center justify-center h-7 w-7 rounded-md bg-rose-100 text-rose-600">
+                  <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M3 12h3l3-8 4 16 3-8h5" />
+                  </svg>
+                </span>
+                <span class="text-xs font-medium text-slate-500">平均置信度</span>
+              </div>
+              <div class="text-2xl font-extrabold text-slate-800" id="statConf">0%</div>
+            </div>
+          </div>
+        </section>
+      </main>
     </div>
 
     <script>
-        let modelLoaded = false;
-        let currentFile = null;
-        let currentFileType = null;
+      let modelLoaded = false;
+      let currentFile = null;
+      let currentFileType = null;
 
-        const modelStatusDot = document.getElementById('modelStatusDot');
-        const modelStatusText = document.getElementById('modelStatusText');
-        const modelInput = document.getElementById('modelInput');
-        const modelPath = document.getElementById('modelPath');
-        const detectBtn = document.getElementById('detectBtn');
-        const downloadBtn = document.getElementById('downloadBtn');
-        const confSlider = document.getElementById('confSlider');
-        const iouSlider = document.getElementById('iouSlider');
-        const confValue = document.getElementById('confValue');
-        const iouValue = document.getElementById('iouValue');
-        const inputPreview = document.getElementById('inputPreview');
-        const outputPreview = document.getElementById('outputPreview');
-        const loadingIndicator = document.getElementById('loadingIndicator');
-        const loadingText = document.getElementById('loadingText');
-        const imageInput = document.getElementById('imageInput');
-        const videoInput = document.getElementById('videoInput');
-        let progressTimer = null;
+      const modelStatusDot = document.getElementById("modelStatusDot");
+      const modelStatusText = document.getElementById("modelStatusText");
+      const modelInput = document.getElementById("modelInput");
+      const modelPath = document.getElementById("modelPath");
+      const detectBtn = document.getElementById("detectBtn");
+      const downloadBtn = document.getElementById("downloadBtn");
+      const confSlider = document.getElementById("confSlider");
+      const iouSlider = document.getElementById("iouSlider");
+      const confValue = document.getElementById("confValue");
+      const iouValue = document.getElementById("iouValue");
+      const inputPreview = document.getElementById("inputPreview");
+      const outputPreview = document.getElementById("outputPreview");
+      const loadingIndicator = document.getElementById("loadingIndicator");
+      const loadingText = document.getElementById("loadingText");
+      const imageInput = document.getElementById("imageInput");
+      const videoInput = document.getElementById("videoInput");
+      let progressTimer = null;
 
-        async function parseApiResponse(response) {
-            const contentType = response.headers.get('content-type') || '';
-            if (contentType.includes('application/json')) {
-                return await response.json();
-            }
-            const text = await response.text();
-            return {
-                success: false,
-                message: text || `请求失败（HTTP ${response.status}）`
-            };
+      async function parseApiResponse(response) {
+        const contentType = response.headers.get("content-type") || "";
+        if (contentType.includes("application/json")) {
+          return await response.json();
+        }
+        const text = await response.text();
+        return {
+          success: false,
+          message: text || `请求失败（HTTP ${response.status}）`,
+        };
+      }
+
+      function setModelStatus(loaded) {
+        if (loaded) {
+          modelStatusDot.classList.remove("bg-amber-500");
+          modelStatusDot.classList.add("bg-emerald-500");
+          modelStatusText.textContent = "已加载";
+          modelStatusText.className = "text-emerald-700 font-semibold";
+        } else {
+          modelStatusDot.classList.remove("bg-emerald-500");
+          modelStatusDot.classList.add("bg-amber-500");
+          modelStatusText.textContent = "等待加载";
+          modelStatusText.className = "text-amber-700 font-semibold";
+        }
+      }
+
+      confSlider.addEventListener("input", (e) => {
+        confValue.textContent = (e.target.value / 100).toFixed(2);
+      });
+
+      iouSlider.addEventListener("input", (e) => {
+        iouValue.textContent = (e.target.value / 100).toFixed(2);
+      });
+
+      function updateDetectButtonState() {
+        detectBtn.disabled = !(modelLoaded && currentFile);
+      }
+
+      modelInput.addEventListener("change", async () => {
+        const modelFile = modelInput.files[0];
+        if (!modelFile) {
+          return;
         }
 
-        function setModelStatus(loaded) {
-            if (loaded) {
-                modelStatusDot.classList.remove('bg-amber-500');
-                modelStatusDot.classList.add('bg-emerald-500');
-                modelStatusText.textContent = '已加载';
-                modelStatusText.className = 'text-emerald-700 font-semibold';
+        const formData = new FormData();
+        formData.append("model", modelFile);
+
+        loadingIndicator.classList.add("active");
+        loadingText.textContent = "正在加载模型...";
+
+        try {
+          const response = await fetch("/api/load_model", {
+            method: "POST",
+            body: formData,
+          });
+
+          const result = await parseApiResponse(response);
+
+          if (result.success) {
+            modelLoaded = true;
+            setModelStatus(true);
+            modelPath.textContent = result.model_path || modelFile.name;
+            updateDetectButtonState();
+          } else {
+            modelLoaded = false;
+            setModelStatus(false);
+            modelPath.textContent = "未加载";
+            updateDetectButtonState();
+            alert("模型加载失败：" + result.message);
+          }
+        } catch (error) {
+          modelLoaded = false;
+          setModelStatus(false);
+          modelPath.textContent = "未加载";
+          updateDetectButtonState();
+          alert("模型加载出错：" + error.message);
+        } finally {
+          loadingIndicator.classList.remove("active");
+          loadingText.textContent = "正在处理中，请稍候...";
+        }
+      });
+
+      imageInput.addEventListener("click", () => {
+        imageInput.value = "";
+      });
+
+      videoInput.addEventListener("click", () => {
+        videoInput.value = "";
+      });
+
+      imageInput.addEventListener("change", (e) => {
+        const file = e.target.files[0];
+        if (file) {
+          currentFile = file;
+          currentFileType = "image";
+          previewFile(file, "image");
+          updateDetectButtonState();
+        }
+      });
+
+      videoInput.addEventListener("change", (e) => {
+        const file = e.target.files[0];
+        if (file) {
+          currentFile = file;
+          currentFileType = "video";
+          previewFile(file, "video");
+          updateDetectButtonState();
+        }
+      });
+
+      function previewFile(file, type) {
+        const url = URL.createObjectURL(file);
+
+        if (type === "image") {
+          inputPreview.innerHTML = `<img src="${url}" alt="Input Image">`;
+        } else {
+          inputPreview.innerHTML = `<video src="${url}" controls preload="metadata" playsinline></video>`;
+        }
+
+        outputPreview.innerHTML = '<div class="text-slate-400 text-sm">等待检测...</div>';
+      }
+
+      function startProgressPolling(isVideo) {
+        if (progressTimer) {
+          clearInterval(progressTimer);
+        }
+        progressTimer = setInterval(async () => {
+          try {
+            const response = await fetch("/api/detect_progress");
+            const progress = await parseApiResponse(response);
+            if (!progress.success && progress.running === undefined) {
+              loadingText.textContent = progress.message || "正在处理中，请稍候...";
+              return;
+            }
+            if (isVideo) {
+              const total = progress.total_frames || 0;
+              const done = progress.processed_frames || 0;
+              loadingText.textContent = `视频检测中：${progress.progress || 0}% (${done}/${total}) | 处理FPS：${(progress.current_fps || 0).toFixed(2)}`;
             } else {
-                modelStatusDot.classList.remove('bg-emerald-500');
-                modelStatusDot.classList.add('bg-amber-500');
-                modelStatusText.textContent = '等待加载';
-                modelStatusText.className = 'text-amber-700 font-semibold';
+              loadingText.textContent = progress.message || "正在处理中，请稍候...";
             }
+          } catch (error) {
+            loadingText.textContent = "正在处理中，请稍候...";
+          }
+        }, 500);
+      }
+
+      function stopProgressPolling() {
+        if (progressTimer) {
+          clearInterval(progressTimer);
+          progressTimer = null;
+        }
+        loadingText.textContent = "正在处理中，请稍候...";
+      }
+
+      detectBtn.addEventListener("click", async () => {
+        if (!currentFile) {
+          alert("请先上传文件！");
+          return;
         }
 
-        confSlider.addEventListener('input', (e) => {
-            confValue.textContent = (e.target.value / 100).toFixed(2);
-        });
+        const formData = new FormData();
+        formData.append("file", currentFile);
+        formData.append("conf_threshold", confSlider.value / 100);
+        formData.append("iou_threshold", iouSlider.value / 100);
+        formData.append("file_type", currentFileType);
 
-        iouSlider.addEventListener('input', (e) => {
-            iouValue.textContent = (e.target.value / 100).toFixed(2);
-        });
+        loadingIndicator.classList.add("active");
+        detectBtn.disabled = true;
+        startProgressPolling(currentFileType === "video");
 
-        function updateDetectButtonState() {
-            detectBtn.disabled = !(modelLoaded && currentFile);
-        }
+        try {
+          const response = await fetch("/api/detect", {
+            method: "POST",
+            body: formData,
+          });
 
-        modelInput.addEventListener('change', async () => {
-            const modelFile = modelInput.files[0];
-            if (!modelFile) {
-                return;
-            }
+          const result = await parseApiResponse(response);
 
-            const formData = new FormData();
-            formData.append('model', modelFile);
-
-            loadingIndicator.classList.add('active');
-            loadingText.textContent = '正在加载模型...';
-
-            try {
-                const response = await fetch('/api/load_model', {
-                    method: 'POST',
-                    body: formData
-                });
-
-                const result = await parseApiResponse(response);
-
-                if (result.success) {
-                    modelLoaded = true;
-                    setModelStatus(true);
-                    modelPath.textContent = result.model_path || modelFile.name;
-                    updateDetectButtonState();
-                } else {
-                    modelLoaded = false;
-                    setModelStatus(false);
-                    modelPath.textContent = '未加载';
-                    updateDetectButtonState();
-                    alert('模型加载失败：' + result.message);
-                }
-            } catch (error) {
-                modelLoaded = false;
-                setModelStatus(false);
-                modelPath.textContent = '未加载';
-                updateDetectButtonState();
-                alert('模型加载出错：' + error.message);
-            } finally {
-                loadingIndicator.classList.remove('active');
-                loadingText.textContent = '正在处理中，请稍候...';
-            }
-        });
-
-        imageInput.addEventListener('click', () => {
-            imageInput.value = '';
-        });
-
-        videoInput.addEventListener('click', () => {
-            videoInput.value = '';
-        });
-
-        imageInput.addEventListener('change', (e) => {
-            const file = e.target.files[0];
-            if (file) {
-                currentFile = file;
-                currentFileType = 'image';
-                previewFile(file, 'image');
-                updateDetectButtonState();
-            }
-        });
-
-        videoInput.addEventListener('change', (e) => {
-            const file = e.target.files[0];
-            if (file) {
-                currentFile = file;
-                currentFileType = 'video';
-                previewFile(file, 'video');
-                updateDetectButtonState();
-            }
-        });
-
-        function previewFile(file, type) {
-            const url = URL.createObjectURL(file);
-
-            if (type === 'image') {
-                inputPreview.innerHTML = `<img src="${url}" alt="Input Image">`;
+          if (result.success) {
+            if (currentFileType === "image") {
+              outputPreview.innerHTML = `<img src="${result.output_path}" alt="Detection Result">`;
             } else {
-                inputPreview.innerHTML = `<video src="${url}" controls preload="metadata" playsinline></video>`;
-            }
-
-            outputPreview.innerHTML = '<div class="text-slate-400 text-sm">等待检测...</div>';
-        }
-
-        function startProgressPolling(isVideo) {
-            if (progressTimer) {
-                clearInterval(progressTimer);
-            }
-            progressTimer = setInterval(async () => {
-                try {
-                    const response = await fetch('/api/detect_progress');
-                    const progress = await parseApiResponse(response);
-                    if (!progress.success && progress.running === undefined) {
-                        loadingText.textContent = progress.message || '正在处理中，请稍候...';
-                        return;
-                    }
-                    if (isVideo) {
-                        const total = progress.total_frames || 0;
-                        const done = progress.processed_frames || 0;
-                        loadingText.textContent =
-                            `视频检测中：${progress.progress || 0}% (${done}/${total}) | 处理FPS：${(progress.current_fps || 0).toFixed(2)}`;
-                    } else {
-                        loadingText.textContent = progress.message || '正在处理中，请稍候...';
-                    }
-                } catch (error) {
-                    loadingText.textContent = '正在处理中，请稍候...';
-                }
-            }, 500);
-        }
-
-        function stopProgressPolling() {
-            if (progressTimer) {
-                clearInterval(progressTimer);
-                progressTimer = null;
-            }
-            loadingText.textContent = '正在处理中，请稍候...';
-        }
-
-        detectBtn.addEventListener('click', async () => {
-            if (!currentFile) {
-                alert('请先上传文件！');
-                return;
-            }
-
-            const formData = new FormData();
-            formData.append('file', currentFile);
-            formData.append('conf_threshold', confSlider.value / 100);
-            formData.append('iou_threshold', iouSlider.value / 100);
-            formData.append('file_type', currentFileType);
-
-            loadingIndicator.classList.add('active');
-            detectBtn.disabled = true;
-            startProgressPolling(currentFileType === 'video');
-
-            try {
-                const response = await fetch('/api/detect', {
-                    method: 'POST',
-                    body: formData
-                });
-
-                const result = await parseApiResponse(response);
-
-                if (result.success) {
-                    if (currentFileType === 'image') {
-                        outputPreview.innerHTML = `<img src="${result.output_path}" alt="Detection Result">`;
-                    } else {
-                        const outputUrl = `${result.output_path}?t=${Date.now()}`;
-                        const fileName = (result.output_path || '').split('/').pop();
-                        const fallbackUrl = fileName ? `/api/preview_video/${encodeURIComponent(fileName)}?t=${Date.now()}` : '';
-                        outputPreview.innerHTML = `<video id="outputVideoPlayer" src="${outputUrl}" controls preload="metadata" playsinline></video>`;
-                        const outputVideoPlayer = document.getElementById('outputVideoPlayer');
-                        outputVideoPlayer.addEventListener('error', () => {
-                            if (!fallbackUrl) {
-                                outputPreview.innerHTML = '<div class="text-slate-400 text-sm">视频无法预览，请下载后查看</div>';
-                                return;
-                            }
-                            outputPreview.innerHTML = `
+              const outputUrl = `${result.output_path}?t=${Date.now()}`;
+              const fileName = (result.output_path || "").split("/").pop();
+              const fallbackUrl = fileName ? `/api/preview_video/${encodeURIComponent(fileName)}?t=${Date.now()}` : "";
+              outputPreview.innerHTML = `<video id="outputVideoPlayer" src="${outputUrl}" controls preload="metadata" playsinline></video>`;
+              const outputVideoPlayer = document.getElementById("outputVideoPlayer");
+              outputVideoPlayer.addEventListener(
+                "error",
+                () => {
+                  if (!fallbackUrl) {
+                    outputPreview.innerHTML = '<div class="text-slate-400 text-sm">视频无法预览，请下载后查看</div>';
+                    return;
+                  }
+                  outputPreview.innerHTML = `
                                 <div class="w-full">
                                     <img src="${fallbackUrl}" alt="Detection Video Stream Preview" class="w-full max-h-[360px] object-contain rounded-xl border border-slate-200">
                                     <p class="mt-2 text-xs text-slate-500">当前浏览器不支持直接播放该编码，已切换为兼容预览流。</p>
                                 </div>`;
-                        }, { once: true });
-                    }
-
-                    document.getElementById('statObjects').textContent = result.stats.total_objects;
-                    document.getElementById('statClasses').textContent = result.stats.num_classes;
-                    document.getElementById('statTime').textContent = result.stats.process_time + 'ms';
-                    document.getElementById('statConf').textContent = result.stats.avg_confidence + '%';
-
-                    downloadBtn.disabled = false;
-                } else {
-                    alert('检测失败：' + result.message);
-                }
-            } catch (error) {
-                alert('检测出错：' + error.message);
-            } finally {
-                stopProgressPolling();
-                loadingIndicator.classList.remove('active');
-                detectBtn.disabled = false;
+                },
+                { once: true },
+              );
             }
-        });
 
-        downloadBtn.addEventListener('click', () => {
-            window.location.href = '/api/download';
-        });
+            document.getElementById("statObjects").textContent = result.stats.total_objects;
+            document.getElementById("statClasses").textContent = result.stats.num_classes;
+            document.getElementById("statTime").textContent = result.stats.process_time + "ms";
+            document.getElementById("statConf").textContent = result.stats.avg_confidence + "%";
+
+            downloadBtn.disabled = false;
+          } else {
+            alert("检测失败：" + result.message);
+          }
+        } catch (error) {
+          alert("检测出错：" + error.message);
+        } finally {
+          stopProgressPolling();
+          loadingIndicator.classList.remove("active");
+          detectBtn.disabled = false;
+        }
+      });
+
+      downloadBtn.addEventListener("click", () => {
+        window.location.href = "/api/download";
+      });
     </script>
-</body>
+  </body>
 </html>
