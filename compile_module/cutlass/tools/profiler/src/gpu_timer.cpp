@@ -89,7 +89,7 @@ void GpuTimer::stop_and_wait(cudaStream_t stream) {
     }
 }
 
-/// Returns the duration in miliseconds
+/// Returns the duration in milliseconds
 double GpuTimer::duration(int iterations) const {
     float avg_ms;
 

@@ -2,4 +2,4 @@
 
 from .muon import Muon, MuSGD
 
-__all__ = ["MuSGD", "Muon"]   
+__all__ = ["MuSGD", "Muon"]

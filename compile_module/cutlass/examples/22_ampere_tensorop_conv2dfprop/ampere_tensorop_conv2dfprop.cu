@@ -65,7 +65,7 @@ ElementComputeEpilogue (float), ElementInputA (cutlass::half_t), ElementInputB
 not enough. As the data is laid out linearly in memory, we have to convey the
 layout of tensors. We do that by initializing template variables LayoutInputA,
 LayoutInputB and LayoutOutput to TensorNHWC cutlass variable. Next, we setup
-rules to comptue alpha * X + beta * C which is called epilogue of the kernel. We
+rules to compute alpha * X + beta * C which is called epilogue of the kernel. We
 initialize template variable EpilogueOp, which takes the data type of output
 ElementOutput (float), the number of elements per vector memory access (8), data
 type of accumulator (float) and data type of computation of linear combination
@@ -79,7 +79,7 @@ mma-op to 128x128x64, 64x64x64, 16x8x16 (MxNxK) respectively. When passed to
 instantiate CUTLASS Implicit GEMM kernel, it internally deduces the amount of
 threads needed per thread-block, amount of shared memory, storing data in
 bank-conflict free manner, and ton of other variables required to compose,
-intialize and launch a high performance Implicit GEMM kernel. This is the beauty
+initialize and launch a high performance Implicit GEMM kernel. This is the beauty
 of CUTLASS, it relieves developer from understanding and coding complicated
 hardware optimizations which can easily go wrong.
 
@@ -105,7 +105,7 @@ architecture of GPU you want to run on.
 These are all put together to create a template variable which describes CUTLASS
 Implicit GEMM kernel using cutlass::conv::device::ImplicitGemm template.
 
-The next step is to intialize physical data, instantiate and initialize CUTLASS
+The next step is to initialize physical data, instantiate and initialize CUTLASS
 kernel and run it. We use CUTLASS utilities to initialize, fill, compare tensors
 as they are simple and doesn't come in the way of learning CUTLASS.
 
@@ -115,7 +115,7 @@ C = 128), filter size (K = 64, R = 3, S = 3, C = 128 ), padding, strides,
 dilation, tensors, alpha, beta and the important one, split k-dimension factor.
 Along with that, we query CUTLASS if any scratch-space memory required by the
 kernel we instantiated. If yes, we create it and pass it along with other
-arguments created to intialize CUTLASS kernel then, the kernel is launched.
+arguments created to initialize CUTLASS kernel then, the kernel is launched.
 
 In this example, we later on launch a reference convolution kernel (from CUTLASS
 utilities) to compare if the output from CUTLASS kernel is same as the reference
