@@ -1,13 +1,14 @@
-import torch
-from torch import nn
-import torch.optim as optim
-from torchvision import datasets, transforms
-from torch.utils.data import DataLoader
-import time
-import numpy as np
 import random
+import time
+
+import numpy as np
+import torch
 from kat_rational import KAT_Group2D
+from torch import nn, optim
+from torch.utils.data import DataLoader
+from torchvision import datasets, transforms
 from tqdm import tqdm
+
 
 def set_random_seed(seed_value=42):
     torch.manual_seed(seed_value)
@@ -18,9 +19,10 @@ def set_random_seed(seed_value=42):
     np.random.seed(seed_value)
     random.seed(seed_value)
 
+
 class CIFARNet(nn.Module):
     def __init__(self, activation_func):
-        super(CIFARNet, self).__init__()
+        super().__init__()
         self.conv1 = nn.Conv2d(3, 64, kernel_size=3, padding=1)
         self.act1 = activation_func()
         self.pool = nn.MaxPool2d(2, 2)
@@ -38,16 +40,15 @@ class CIFARNet(nn.Module):
         x = self.fc2(x)
         return x
 
+
 def train_one_epoch(model, data_loader, criterion, optimizer, device, epoch):
-    """
-    Train the model for a single epoch on the given data_loader.
-    Returns the total loss for that epoch.
+    """Train the model for a single epoch on the given data_loader. Returns the total loss for that epoch.
     """
     model.train()
     total_loss = 0.0
-    
+
     # Create a progress bar
-    progress_bar = tqdm(data_loader, desc=f"Epoch {epoch+1}", unit="batch")
+    progress_bar = tqdm(data_loader, desc=f"Epoch {epoch + 1}", unit="batch")
 
     for batch_idx, (images, labels) in enumerate(progress_bar):
         images, labels = images.to(device), labels.to(device)
@@ -74,9 +75,7 @@ def train_one_epoch(model, data_loader, criterion, optimizer, device, epoch):
 
 
 def evaluate(model, data_loader, device):
-    """
-    Evaluate the model on the given data_loader.
-    Returns the number of correctly predicted samples and total samples.
+    """Evaluate the model on the given data_loader. Returns the number of correctly predicted samples and total samples.
     """
     model.eval()
     total_correct = 0
@@ -94,6 +93,7 @@ def evaluate(model, data_loader, device):
 
     return total_correct, total_samples
 
+
 def train_and_benchmark(activation_func, label, epochs=10, seed=42):
     set_random_seed(seed)
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -101,33 +101,27 @@ def train_and_benchmark(activation_func, label, epochs=10, seed=42):
     criterion = nn.CrossEntropyLoss()
     # optimizer = optim.SGD(model.parameters(), lr=0.1, momentum=0.9, weight_decay=5e-4)
     optimizer = optim.Adam(model.parameters(), lr=0.001)
-    
-    transform_train = transforms.Compose([
-        transforms.RandomHorizontalFlip(),
-        transforms.RandomCrop(32, padding=4),
-        transforms.ToTensor(),
-        transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5)),
-    ])
-    
-    transform = transforms.Compose([
-        transforms.ToTensor(),
-        transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))
-    ])
-    dataset = datasets.CIFAR10(root='./data', train=True, download=True, transform=transform_train)
+
+    transform_train = transforms.Compose(
+        [
+            transforms.RandomHorizontalFlip(),
+            transforms.RandomCrop(32, padding=4),
+            transforms.ToTensor(),
+            transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5)),
+        ]
+    )
+
+    transform = transforms.Compose([transforms.ToTensor(), transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])
+    dataset = datasets.CIFAR10(root="./data", train=True, download=True, transform=transform_train)
     train_loader = DataLoader(dataset, batch_size=128, shuffle=True)
-    test_dataset = datasets.CIFAR10(root='./data', train=False, transform=transform)
+    test_dataset = datasets.CIFAR10(root="./data", train=False, transform=transform)
     test_loader = DataLoader(test_dataset, batch_size=64, shuffle=False)
-    
+
     # Training
     start_time = time.time()
     for epoch in range(epochs):
-        total_loss = train_one_epoch(
-            model=model,
-            data_loader=train_loader,
-            criterion=criterion,
-            optimizer=optimizer,
-            device=device,
-            epoch=epoch
+        train_one_epoch(
+            model=model, data_loader=train_loader, criterion=criterion, optimizer=optimizer, device=device, epoch=epoch
         )
 
     training_duration = time.time() - start_time
@@ -140,10 +134,10 @@ def train_and_benchmark(activation_func, label, epochs=10, seed=42):
 
     print(f"{label} Testing Accuracy: {accuracy:.2f}%, Total time: {total_time:.2f} seconds.")
 
+
 if __name__ == "__main__":
     kat_activation = KAT_Group2D  # Replace with your actual KAT_1DGroup class if available
-    train_and_benchmark(kat_activation, 'KAT 2DGroup')
+    train_and_benchmark(kat_activation, "KAT 2DGroup")
 
-    
     kat_activation = nn.ReLU  # Replace with your actual KAT_1DGroup class if available
-    train_and_benchmark(kat_activation, 'ReLU')
+    train_and_benchmark(kat_activation, "ReLU")

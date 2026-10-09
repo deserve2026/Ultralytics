@@ -49,7 +49,7 @@ struct ArrayPlanarComplex {
     /// Number of logical elements
     static size_t const kElements = N;
 
-    /// Underlying Fragment of real-valued elemenets
+    /// Underlying Fragment of real-valued elements
     using ArrayReal = Array<Element, N>;
 
 public:
