@@ -107,7 +107,7 @@ corresponding to the access (d, h, w, c) within the tile.
 /// Statically sized array of bits implementing
 /// @concept{predicate_vector_concept}.
 template <
-        /// Number of predicates conatined in predicate vector
+        /// Number of predicates contained in predicate vector
         int kPredicates_,
         /// Number of predicates contained in each byte of internal storage
         int kPredicatesPerByte_ = 4,
