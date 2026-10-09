@@ -89,7 +89,7 @@ set(CUTLASS_PROFILER_TEST_COMMAND_OPTIONS_CONV2D --operation=Conv2d     --provid
 set(CUTLASS_PROFILER_TEST_COMMAND_OPTIONS_CONV3D --operation=Conv3d     --providers=cutlass --verification-providers=cudnn,device,host  --junit-output=test_cutlass_profiler_conv3d)
 cutlass_add_executable_tests(
   test_profiler cutlass_profiler
-  DEPENDEES test_all
+  DEPENDENCIES test_all
   TEST_COMMAND_OPTIONS 
     CUTLASS_PROFILER_TEST_COMMAND_OPTIONS_GEMM
     CUTLASS_PROFILER_TEST_COMMAND_OPTIONS_CONV2D

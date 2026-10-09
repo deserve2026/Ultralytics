@@ -91,7 +91,7 @@ struct Matrix<Element_, 1, 2> {
     CUTLASS_HOST_DEVICE
     Matrix(Matrix const& rhs) { data = rhs.data; }
 
-    /// Constucts a 1-by-2 matrix from scalar elements
+    /// Constructs a 1-by-2 matrix from scalar elements
     CUTLASS_HOST_DEVICE
     Matrix(Element _0_0, Element _0_1) {
         data[0] = _0_0;
@@ -528,7 +528,7 @@ struct Matrix<Element_, 1, 2> {
 template <typename Element>
 using Matrix1x2 = Matrix<Element, 1, 2>;
 
-/// Free funciton to infer element type from template arguments
+/// Free function to infer element type from template arguments
 template <typename Element>
 CUTLASS_HOST_DEVICE Matrix1x2<Element> make_Matrix1x2(Element _0_0,
                                                       Element _0_1) {
@@ -578,7 +578,7 @@ struct Matrix<Element_, 1, 3> {
     CUTLASS_HOST_DEVICE
     Matrix(Matrix const& rhs) { data = rhs.data; }
 
-    /// Constucts a 1-by-3 matrix from scalar elements
+    /// Constructs a 1-by-3 matrix from scalar elements
     CUTLASS_HOST_DEVICE
     Matrix(Element _0_0, Element _0_1, Element _0_2) {
         data[0] = _0_0;
@@ -1086,7 +1086,7 @@ struct Matrix<Element_, 1, 3> {
 template <typename Element>
 using Matrix1x3 = Matrix<Element, 1, 3>;
 
-/// Free funciton to infer element type from template arguments
+/// Free function to infer element type from template arguments
 template <typename Element>
 CUTLASS_HOST_DEVICE Matrix1x3<Element> make_Matrix1x3(Element _0_0,
                                                       Element _0_1,
@@ -1137,7 +1137,7 @@ struct Matrix<Element_, 1, 4> {
     CUTLASS_HOST_DEVICE
     Matrix(Matrix const& rhs) { data = rhs.data; }
 
-    /// Constucts a 1-by-4 matrix from scalar elements
+    /// Constructs a 1-by-4 matrix from scalar elements
     CUTLASS_HOST_DEVICE
     Matrix(Element _0_0, Element _0_1, Element _0_2, Element _0_3) {
         data[0] = _0_0;
@@ -1701,7 +1701,7 @@ struct Matrix<Element_, 1, 4> {
 template <typename Element>
 using Matrix1x4 = Matrix<Element, 1, 4>;
 
-/// Free funciton to infer element type from template arguments
+/// Free function to infer element type from template arguments
 template <typename Element>
 CUTLASS_HOST_DEVICE Matrix1x4<Element> make_Matrix1x4(Element _0_0,
                                                       Element _0_1,
@@ -1753,7 +1753,7 @@ struct Matrix<Element_, 2, 1> {
     CUTLASS_HOST_DEVICE
     Matrix(Matrix const& rhs) { data = rhs.data; }
 
-    /// Constucts a 2-by-1 matrix from scalar elements
+    /// Constructs a 2-by-1 matrix from scalar elements
     CUTLASS_HOST_DEVICE
     Matrix(Element _0_0, Element _1_0) {
         data[0] = _0_0;
@@ -2196,7 +2196,7 @@ struct Matrix<Element_, 2, 1> {
 template <typename Element>
 using Matrix2x1 = Matrix<Element, 2, 1>;
 
-/// Free funciton to infer element type from template arguments
+/// Free function to infer element type from template arguments
 template <typename Element>
 CUTLASS_HOST_DEVICE Matrix2x1<Element> make_Matrix2x1(Element _0_0,
                                                       Element _1_0) {
@@ -2246,7 +2246,7 @@ struct Matrix<Element_, 2, 2> {
     CUTLASS_HOST_DEVICE
     Matrix(Matrix const& rhs) { data = rhs.data; }
 
-    /// Constucts a 2-by-2 matrix from scalar elements
+    /// Constructs a 2-by-2 matrix from scalar elements
     CUTLASS_HOST_DEVICE
     Matrix(Element _0_0, Element _0_1, Element _1_0, Element _1_1) {
         data[0] = _0_0;
@@ -2255,7 +2255,7 @@ struct Matrix<Element_, 2, 2> {
         data[3] = _1_1;
     }
 
-    /// Constucts a 2-by-2 matrix from row vectors
+    /// Constructs a 2-by-2 matrix from row vectors
     CUTLASS_HOST_DEVICE
     Matrix(Matrix<Element, 1, 2> const& row_0,
            Matrix<Element, 1, 2> const& row_1) {
@@ -2893,7 +2893,7 @@ struct Matrix<Element_, 2, 2> {
 template <typename Element>
 using Matrix2x2 = Matrix<Element, 2, 2>;
 
-/// Free funciton to infer element type from template arguments
+/// Free function to infer element type from template arguments
 template <typename Element>
 CUTLASS_HOST_DEVICE Matrix2x2<Element> make_Matrix2x2(Element _0_0,
                                                       Element _0_1,
@@ -2945,7 +2945,7 @@ struct Matrix<Element_, 2, 3> {
     CUTLASS_HOST_DEVICE
     Matrix(Matrix const& rhs) { data = rhs.data; }
 
-    /// Constucts a 2-by-3 matrix from scalar elements
+    /// Constructs a 2-by-3 matrix from scalar elements
     CUTLASS_HOST_DEVICE
     Matrix(Element _0_0, Element _0_1, Element _0_2, Element _1_0, Element _1_1,
            Element _1_2) {
@@ -2957,7 +2957,7 @@ struct Matrix<Element_, 2, 3> {
         data[5] = _1_2;
     }
 
-    /// Constucts a 2-by-3 matrix from row vectors
+    /// Constructs a 2-by-3 matrix from row vectors
     CUTLASS_HOST_DEVICE
     Matrix(Matrix<Element, 1, 3> const& row_0,
            Matrix<Element, 1, 3> const& row_1) {
@@ -3684,7 +3684,7 @@ struct Matrix<Element_, 2, 3> {
 template <typename Element>
 using Matrix2x3 = Matrix<Element, 2, 3>;
 
-/// Free funciton to infer element type from template arguments
+/// Free function to infer element type from template arguments
 template <typename Element>
 CUTLASS_HOST_DEVICE Matrix2x3<Element> make_Matrix2x3(
         Element _0_0, Element _0_1, Element _0_2, Element _1_0, Element _1_1,
@@ -3735,7 +3735,7 @@ struct Matrix<Element_, 2, 4> {
     CUTLASS_HOST_DEVICE
     Matrix(Matrix const& rhs) { data = rhs.data; }
 
-    /// Constucts a 2-by-4 matrix from scalar elements
+    /// Constructs a 2-by-4 matrix from scalar elements
     CUTLASS_HOST_DEVICE
     Matrix(Element _0_0, Element _0_1, Element _0_2, Element _0_3, Element _1_0,
            Element _1_1, Element _1_2, Element _1_3) {
@@ -3749,7 +3749,7 @@ struct Matrix<Element_, 2, 4> {
         data[7] = _1_3;
     }
 
-    /// Constucts a 2-by-4 matrix from row vectors
+    /// Constructs a 2-by-4 matrix from row vectors
     CUTLASS_HOST_DEVICE
     Matrix(Matrix<Element, 1, 4> const& row_0,
            Matrix<Element, 1, 4> const& row_1) {
@@ -4615,7 +4615,7 @@ struct Matrix<Element_, 2, 4> {
 template <typename Element>
 using Matrix2x4 = Matrix<Element, 2, 4>;
 
-/// Free funciton to infer element type from template arguments
+/// Free function to infer element type from template arguments
 template <typename Element>
 CUTLASS_HOST_DEVICE Matrix2x4<Element> make_Matrix2x4(
         Element _0_0, Element _0_1, Element _0_2, Element _0_3, Element _1_0,
@@ -4666,7 +4666,7 @@ struct Matrix<Element_, 3, 1> {
     CUTLASS_HOST_DEVICE
     Matrix(Matrix const& rhs) { data = rhs.data; }
 
-    /// Constucts a 3-by-1 matrix from scalar elements
+    /// Constructs a 3-by-1 matrix from scalar elements
     CUTLASS_HOST_DEVICE
     Matrix(Element _0_0, Element _1_0, Element _2_0) {
         data[0] = _0_0;
@@ -5181,7 +5181,7 @@ struct Matrix<Element_, 3, 1> {
 template <typename Element>
 using Matrix3x1 = Matrix<Element, 3, 1>;
 
-/// Free funciton to infer element type from template arguments
+/// Free function to infer element type from template arguments
 template <typename Element>
 CUTLASS_HOST_DEVICE Matrix3x1<Element> make_Matrix3x1(Element _0_0,
                                                       Element _1_0,
@@ -5232,7 +5232,7 @@ struct Matrix<Element_, 3, 2> {
     CUTLASS_HOST_DEVICE
     Matrix(Matrix const& rhs) { data = rhs.data; }
 
-    /// Constucts a 3-by-2 matrix from scalar elements
+    /// Constructs a 3-by-2 matrix from scalar elements
     CUTLASS_HOST_DEVICE
     Matrix(Element _0_0, Element _0_1, Element _1_0, Element _1_1, Element _2_0,
            Element _2_1) {
@@ -5244,7 +5244,7 @@ struct Matrix<Element_, 3, 2> {
         data[5] = _2_1;
     }
 
-    /// Constucts a 3-by-2 matrix from row vectors
+    /// Constructs a 3-by-2 matrix from row vectors
     CUTLASS_HOST_DEVICE
     Matrix(Matrix<Element, 1, 2> const& row_0,
            Matrix<Element, 1, 2> const& row_1,
@@ -5977,7 +5977,7 @@ struct Matrix<Element_, 3, 2> {
 template <typename Element>
 using Matrix3x2 = Matrix<Element, 3, 2>;
 
-/// Free funciton to infer element type from template arguments
+/// Free function to infer element type from template arguments
 template <typename Element>
 CUTLASS_HOST_DEVICE Matrix3x2<Element> make_Matrix3x2(
         Element _0_0, Element _0_1, Element _1_0, Element _1_1, Element _2_0,
@@ -6028,7 +6028,7 @@ struct Matrix<Element_, 3, 3> {
     CUTLASS_HOST_DEVICE
     Matrix(Matrix const& rhs) { data = rhs.data; }
 
-    /// Constucts a 3-by-3 matrix from scalar elements
+    /// Constructs a 3-by-3 matrix from scalar elements
     CUTLASS_HOST_DEVICE
     Matrix(Element _0_0, Element _0_1, Element _0_2, Element _1_0, Element _1_1,
            Element _1_2, Element _2_0, Element _2_1, Element _2_2) {
@@ -6043,7 +6043,7 @@ struct Matrix<Element_, 3, 3> {
         data[8] = _2_2;
     }
 
-    /// Constucts a 3-by-3 matrix from row vectors
+    /// Constructs a 3-by-3 matrix from row vectors
     CUTLASS_HOST_DEVICE
     Matrix(Matrix<Element, 1, 3> const& row_0,
            Matrix<Element, 1, 3> const& row_1,
@@ -7126,7 +7126,7 @@ struct Matrix<Element_, 3, 3> {
 template <typename Element>
 using Matrix3x3 = Matrix<Element, 3, 3>;
 
-/// Free funciton to infer element type from template arguments
+/// Free function to infer element type from template arguments
 template <typename Element>
 CUTLASS_HOST_DEVICE Matrix3x3<Element> make_Matrix3x3(
         Element _0_0, Element _0_1, Element _0_2, Element _1_0, Element _1_1,
@@ -7178,7 +7178,7 @@ struct Matrix<Element_, 3, 4> {
     CUTLASS_HOST_DEVICE
     Matrix(Matrix const& rhs) { data = rhs.data; }
 
-    /// Constucts a 3-by-4 matrix from scalar elements
+    /// Constructs a 3-by-4 matrix from scalar elements
     CUTLASS_HOST_DEVICE
     Matrix(Element _0_0, Element _0_1, Element _0_2, Element _0_3, Element _1_0,
            Element _1_1, Element _1_2, Element _1_3, Element _2_0, Element _2_1,
@@ -7197,7 +7197,7 @@ struct Matrix<Element_, 3, 4> {
         data[11] = _2_3;
     }
 
-    /// Constucts a 3-by-4 matrix from row vectors
+    /// Constructs a 3-by-4 matrix from row vectors
     CUTLASS_HOST_DEVICE
     Matrix(Matrix<Element, 1, 4> const& row_0,
            Matrix<Element, 1, 4> const& row_1,
@@ -8364,7 +8364,7 @@ struct Matrix<Element_, 3, 4> {
 template <typename Element>
 using Matrix3x4 = Matrix<Element, 3, 4>;
 
-/// Free funciton to infer element type from template arguments
+/// Free function to infer element type from template arguments
 template <typename Element>
 CUTLASS_HOST_DEVICE Matrix3x4<Element> make_Matrix3x4(
         Element _0_0, Element _0_1, Element _0_2, Element _0_3, Element _1_0,
@@ -8417,7 +8417,7 @@ struct Matrix<Element_, 4, 1> {
     CUTLASS_HOST_DEVICE
     Matrix(Matrix const& rhs) { data = rhs.data; }
 
-    /// Constucts a 4-by-1 matrix from scalar elements
+    /// Constructs a 4-by-1 matrix from scalar elements
     CUTLASS_HOST_DEVICE
     Matrix(Element _0_0, Element _1_0, Element _2_0, Element _3_0) {
         data[0] = _0_0;
@@ -8992,7 +8992,7 @@ struct Matrix<Element_, 4, 1> {
 template <typename Element>
 using Matrix4x1 = Matrix<Element, 4, 1>;
 
-/// Free funciton to infer element type from template arguments
+/// Free function to infer element type from template arguments
 template <typename Element>
 CUTLASS_HOST_DEVICE Matrix4x1<Element> make_Matrix4x1(Element _0_0,
                                                       Element _1_0,
@@ -9044,7 +9044,7 @@ struct Matrix<Element_, 4, 2> {
     CUTLASS_HOST_DEVICE
     Matrix(Matrix const& rhs) { data = rhs.data; }
 
-    /// Constucts a 4-by-2 matrix from scalar elements
+    /// Constructs a 4-by-2 matrix from scalar elements
     CUTLASS_HOST_DEVICE
     Matrix(Element _0_0, Element _0_1, Element _1_0, Element _1_1, Element _2_0,
            Element _2_1, Element _3_0, Element _3_1) {
@@ -9058,7 +9058,7 @@ struct Matrix<Element_, 4, 2> {
         data[7] = _3_1;
     }
 
-    /// Constucts a 4-by-2 matrix from row vectors
+    /// Constructs a 4-by-2 matrix from row vectors
     CUTLASS_HOST_DEVICE
     Matrix(Matrix<Element, 1, 2> const& row_0,
            Matrix<Element, 1, 2> const& row_1,
@@ -9938,7 +9938,7 @@ struct Matrix<Element_, 4, 2> {
 template <typename Element>
 using Matrix4x2 = Matrix<Element, 4, 2>;
 
-/// Free funciton to infer element type from template arguments
+/// Free function to infer element type from template arguments
 template <typename Element>
 CUTLASS_HOST_DEVICE Matrix4x2<Element> make_Matrix4x2(
         Element _0_0, Element _0_1, Element _1_0, Element _1_1, Element _2_0,
@@ -9989,7 +9989,7 @@ struct Matrix<Element_, 4, 3> {
     CUTLASS_HOST_DEVICE
     Matrix(Matrix const& rhs) { data = rhs.data; }
 
-    /// Constucts a 4-by-3 matrix from scalar elements
+    /// Constructs a 4-by-3 matrix from scalar elements
     CUTLASS_HOST_DEVICE
     Matrix(Element _0_0, Element _0_1, Element _0_2, Element _1_0, Element _1_1,
            Element _1_2, Element _2_0, Element _2_1, Element _2_2, Element _3_0,
@@ -10008,7 +10008,7 @@ struct Matrix<Element_, 4, 3> {
         data[11] = _3_2;
     }
 
-    /// Constucts a 4-by-3 matrix from row vectors
+    /// Constructs a 4-by-3 matrix from row vectors
     CUTLASS_HOST_DEVICE
     Matrix(Matrix<Element, 1, 3> const& row_0,
            Matrix<Element, 1, 3> const& row_1,
@@ -11182,7 +11182,7 @@ struct Matrix<Element_, 4, 3> {
 template <typename Element>
 using Matrix4x3 = Matrix<Element, 4, 3>;
 
-/// Free funciton to infer element type from template arguments
+/// Free function to infer element type from template arguments
 template <typename Element>
 CUTLASS_HOST_DEVICE Matrix4x3<Element> make_Matrix4x3(
         Element _0_0, Element _0_1, Element _0_2, Element _1_0, Element _1_1,
@@ -11235,7 +11235,7 @@ struct Matrix<Element_, 4, 4> {
     CUTLASS_HOST_DEVICE
     Matrix(Matrix const& rhs) { data = rhs.data; }
 
-    /// Constucts a 4-by-4 matrix from scalar elements
+    /// Constructs a 4-by-4 matrix from scalar elements
     CUTLASS_HOST_DEVICE
     Matrix(Element _0_0, Element _0_1, Element _0_2, Element _0_3, Element _1_0,
            Element _1_1, Element _1_2, Element _1_3, Element _2_0, Element _2_1,
@@ -11259,7 +11259,7 @@ struct Matrix<Element_, 4, 4> {
         data[15] = _3_3;
     }
 
-    /// Constucts a 4-by-4 matrix from row vectors
+    /// Constructs a 4-by-4 matrix from row vectors
     CUTLASS_HOST_DEVICE
     Matrix(Matrix<Element, 1, 4> const& row_0,
            Matrix<Element, 1, 4> const& row_1,
@@ -12920,7 +12920,7 @@ struct Matrix<Element_, 4, 4> {
 template <typename Element>
 using Matrix4x4 = Matrix<Element, 4, 4>;
 
-/// Free funciton to infer element type from template arguments
+/// Free function to infer element type from template arguments
 template <typename Element>
 CUTLASS_HOST_DEVICE Matrix4x4<Element> make_Matrix4x4(
         Element _0_0, Element _0_1, Element _0_2, Element _0_3, Element _1_0,

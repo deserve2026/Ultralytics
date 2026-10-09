@@ -83,7 +83,7 @@ public:
     using WmmaDataType = typename OperatorFragment::element_type;
     using Element = typename cutlass::arch::WmmaToCutlassDataType<
             WmmaDataType>::Type;  ///< Data Type of element stored in
-                                  ///< nvcuda::wmma::frament
+                                  ///< nvcuda::wmma::fragment
     using TensorRef = TensorRef<Element, Layout>;  ///< Tensor Reference object
     using TensorCoord =
             MatrixCoord;  ///< Logical coordinate in referenced tensor
