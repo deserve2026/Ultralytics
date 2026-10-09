@@ -580,7 +580,7 @@ public:
     /// Constructs the GEMM.
     GemmArray() {}
 
-    /// Helper to construct a transposed equivalent for the underying GEMM
+    /// Helper to construct a transposed equivalent for the underlying GEMM
     /// operator
     static UnderlyingArguments to_underlying_arguments(Arguments const& args) {
         GemmCoord problem_size{args.problem_size.n(), args.problem_size.m(),

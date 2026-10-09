@@ -206,7 +206,7 @@ static struct {
     char const* pretty;
     NumericTypeID enumerant;
 } NumericTypeID_enumerants[] = {
-        {"unknown", "<unkown>", NumericTypeID::kUnknown},
+        {"unknown", "<unknown>", NumericTypeID::kUnknown},
         {"void", "Void", NumericTypeID::kVoid},
         {"b1", "B1", NumericTypeID::kB1},
         {"u2", "U2", NumericTypeID::kU2},
@@ -243,7 +243,7 @@ static struct {
         {"cs16", "CS16", NumericTypeID::kCS16},
         {"cs32", "CS32", NumericTypeID::kCS32},
         {"cs64", "CS64", NumericTypeID::kCS64},
-        {"*", "<unkown/enumerate all>", NumericTypeID::kUnknown}};
+        {"*", "<unknown/enumerate all>", NumericTypeID::kUnknown}};
 
 /// Converts a NumericTypeID enumerant to a string
 char const* to_string(NumericTypeID type, bool pretty) {
@@ -776,7 +776,7 @@ static struct {
     char const* pretty;
     ConvKind enumerant;
 } ConvKind_enumerants[] = {
-        {"unknown", "<unkown>", ConvKind::kUnknown},
+        {"unknown", "<unknown>", ConvKind::kUnknown},
         {"fprop", "<fprop>", ConvKind::kFprop},
         {"dgrad", "<dgrad>", ConvKind::kDgrad},
         {"wgrad", "<wgrad>", ConvKind::kWgrad},
