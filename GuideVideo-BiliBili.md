@@ -46,7 +46,7 @@
 
 - **YOLO26｜Ultralytics｜怎么自定义best.pt的保存机制？**  
   [https://www.bilibili.com/video/BV1UYftB6Euv/](https://www.bilibili.com/video/BV1UYftB6Euv/)  
-  YOLO26｜Ultralytics｜怎么自定义best.pt的保存机制？  
+  YOLO26｜Ultralytics｜怎么自定义best.pt的保存机制？
 
 ## 创新点整合
 
@@ -75,15 +75,15 @@
 
 - **YOLO26｜Ultralytics｜手把手带你生成论文必备的特征图**  
   [https://www.bilibili.com/video/BV1o5ftBXE3r/](https://www.bilibili.com/video/BV1o5ftBXE3r/)  
-  YOLO26｜Ultralytics｜手把手带你生成论文必备的特征图  
+  YOLO26｜Ultralytics｜手把手带你生成论文必备的特征图
 
 - **YOLO26｜Ultralytics｜手把手带你生成论文必备的热力图**  
   [https://www.bilibili.com/video/BV15NPEzqEed/](https://www.bilibili.com/video/BV15NPEzqEed/)  
-  YOLO26｜Ultralytics｜手把手带你生成论文必备的热力图  
+  YOLO26｜Ultralytics｜手把手带你生成论文必备的热力图
 
 - **YOLO26｜Ultralytics｜检测框颜色、训练生成的图表颜色-修改教程**  
   [https://www.bilibili.com/video/BV1LpP7zKELD/](https://www.bilibili.com/video/BV1LpP7zKELD/)  
-  YOLO26｜Ultralytics｜检测框颜色、训练生成的图表颜色-修改教程  
+  YOLO26｜Ultralytics｜检测框颜色、训练生成的图表颜色-修改教程
 
 ## 模型结构图绘制
 

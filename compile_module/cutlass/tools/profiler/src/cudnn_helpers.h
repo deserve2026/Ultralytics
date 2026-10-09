@@ -86,7 +86,7 @@ float cast_cudnn_compute_type_to_float(library::NumericTypeID type,
 
 /// This is a helper class to create cudnnHandle_t automatically on CudnnCreate
 /// object creation and to destroy cudnnHandle_t on CudnnCreate object
-/// destruction. Additionaly, it provides implicit cast from CudnnCreate's
+/// destruction. Additionally, it provides implicit cast from CudnnCreate's
 /// object to cudnnHandle_t's object
 class CudnnCreate {
 private:

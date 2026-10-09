@@ -100,7 +100,7 @@ struct Wmma<Shape_,  ///< Size of the matrix product (concept: GemmShape)
 
 #else
     static_assert(false,
-                  "wmma.mma.sync interger type multiplicands is avialable only "
+                  "wmma.mma.sync integer type multiplicands is available only "
                   "for SM75 and beyond");
 #endif
 };
@@ -166,7 +166,7 @@ struct Wmma<Shape_,  ///< Size of the matrix product (concept: GemmShape)
 
 #else
     static_assert(false,
-                  "wmma.mma.sync interger type multiplicands is avialable only "
+                  "wmma.mma.sync integer type multiplicands is available only "
                   "for SM75 and beyond");
 #endif
 };

@@ -6,5 +6,5 @@
 # Modified from https://github.com/chengdazhi/Deformable-Convolution-V2-PyTorch/tree/pytorch_1.0.0
 # ------------------------------------------------------------------------------------------------
 
-from .flash_deform_attn import FlashDeformAttn
 from .dcnv4 import DCNv4
+from .flash_deform_attn import FlashDeformAttn
