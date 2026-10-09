@@ -44,7 +44,7 @@
   demonstrated elsewhere in other examples and are prevalent in the CUTLASS unit
   tests.
 
-  This example has delibrately been kept similar to the basic_gemm example from
+  This example has deliberately been kept similar to the basic_gemm example from
   cutass-1.3 to highlight the minimum amount of differences needed to transition
   to cutlass-2.0.
 
