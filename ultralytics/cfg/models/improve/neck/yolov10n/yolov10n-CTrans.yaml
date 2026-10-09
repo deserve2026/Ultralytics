@@ -1,0 +1,45 @@
+# Ultralytics 🚀 AGPL-3.0 License - https://ultralytics.com/license
+
+# Ultralytics YOLOv10n CTrans neck model with P3/8 - P5/32 outputs
+
+# Parameters
+nc: 80
+scales:
+  n: [0.33, 0.25, 1024]
+
+backbone:
+  - [-1, 1, Conv, [64, 3, 2]] # 0-P1/2
+  - [-1, 1, Conv, [128, 3, 2]] # 1-P2/4
+  - [-1, 3, C2f, [128, True]] # 2-P2/4
+  - [-1, 1, Conv, [256, 3, 2]] # 3-P3/8
+  - [-1, 6, C2f, [256, True]] # 4-P3/8
+  - [-1, 1, SCDown, [512, 3, 2]] # 5-P4/16
+  - [-1, 6, C2f, [512, True]] # 6-P4/16
+  - [-1, 1, SCDown, [1024, 3, 2]] # 7-P5/32
+  - [-1, 3, C2f, [1024, True]] # 8-P5/32
+  - [-1, 1, SPPF, [1024, 5]] # 9-P5/32
+  - [-1, 1, PSA, [1024]] # 10-P5/32
+
+head:
+  - [[4, 6, 10], 1, ChannelTransformer, []] # 11-P3/8,P4/16,P5/32
+  - [11, 1, GetIndexOutput, [0]] # 12-P3/8
+  - [11, 1, GetIndexOutput, [1]] # 13-P4/16
+  - [11, 1, GetIndexOutput, [2]] # 14-P5/32
+
+  - [-1, 1, nn.Upsample, [None, 2, "nearest"]] # 15-P4/16
+  - [[-1, 6], 1, Concat, [1]] # 16-P4/16
+  - [-1, 3, C2f, [512]] # 17-P4/16
+
+  - [-1, 1, nn.Upsample, [None, 2, "nearest"]] # 18-P3/8
+  - [[-1, 4], 1, Concat, [1]] # 19-P3/8
+  - [-1, 3, C2f, [256]] # 20-P3/8
+
+  - [-1, 1, Conv, [256, 3, 2]] # 21-P4/16
+  - [[-1, 17], 1, Concat, [1]] # 22-P4/16
+  - [-1, 3, C2f, [512]] # 23-P4/16
+
+  - [-1, 1, SCDown, [512, 3, 2]] # 24-P5/32
+  - [[-1, 14], 1, Concat, [1]] # 25-P5/32
+  - [-1, 3, C2fCIB, [1024, True, True]] # 26-P5/32
+
+  - [[20, 23, 26], 1, v10Detect, [nc]] # 27-P3/8,P4/16,P5/32

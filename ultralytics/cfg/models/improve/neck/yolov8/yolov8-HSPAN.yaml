@@ -1,0 +1,62 @@
+# Ultralytics 🚀 AGPL-3.0 License - https://ultralytics.com/license
+
+# Ultralytics YOLOv8 HSPAN neck model with P3/8 - P5/32 outputs
+
+# Parameters
+nc: 80
+scales:
+  n: [0.33, 0.25, 1024]
+  s: [0.33, 0.50, 1024]
+  m: [0.67, 0.75, 768]
+  l: [1.00, 1.00, 512]
+  x: [1.00, 1.25, 512]
+
+backbone:
+  - [-1, 1, Conv, [64, 3, 2]] # 0-P1/2
+  - [-1, 1, Conv, [128, 3, 2]] # 1-P2/4
+  - [-1, 3, C2f, [128, True]] # 2-P2/4
+  - [-1, 1, Conv, [256, 3, 2]] # 3-P3/8
+  - [-1, 6, C2f, [256, True]] # 4-P3/8
+  - [-1, 1, Conv, [512, 3, 2]] # 5-P4/16
+  - [-1, 6, C2f, [512, True]] # 6-P4/16
+  - [-1, 1, Conv, [1024, 3, 2]] # 7-P5/32
+  - [-1, 3, C2f, [1024, True]] # 8-P5/32
+  - [-1, 1, SPPF, [1024, 5]] # 9-P5/32
+
+head:
+  - [-1, 1, ChannelAttention_HSFPN, []] # 10-P5/32
+  - [-1, 1, nn.Conv2d, [256, 1]] # 11-P5/32
+  - [-1, 1, nn.ConvTranspose2d, [256, 3, 2, 1, 1]] # 12-P4/16
+
+  - [6, 1, ChannelAttention_HSFPN, []] # 13-P4/16
+  - [-1, 1, nn.Conv2d, [256, 1]] # 14-P4/16
+  - [12, 1, ChannelAttention_HSFPN, [4, False]] # 15-/640
+  - [[-1, -2], 1, Multiply, []] # 16-P4/16
+  - [[-1, 12], 1, Add, []] # 17-P4/16
+  - [-1, 3, C2f, [256]] # 18-P4/16
+
+  - [12, 1, nn.ConvTranspose2d, [256, 3, 2, 1, 1]] # 19-P3/8
+  - [4, 1, ChannelAttention_HSFPN, []] # 20-P3/8
+  - [-1, 1, nn.Conv2d, [256, 1]] # 21-P3/8
+  - [19, 1, ChannelAttention_HSFPN, [4, False]] # 22-/640
+  - [[-1, -2], 1, Multiply, []] # 23-P3/8
+  - [[-1, 19], 1, Add, []] # 24-P3/8
+  - [-1, 3, C2f, [256]] # 25-P3/8
+
+  - [-1, 1, nn.Conv2d, [256, 3, 2, 1]] # 26-P4/16
+  - [18, 1, ChannelAttention_HSFPN, []] # 27-P4/16
+  - [-1, 1, nn.Conv2d, [256, 1]] # 28-P4/16
+  - [26, 1, ChannelAttention_HSFPN, [4, False]] # 29-/640
+  - [[-1, -2], 1, Multiply, []] # 30-P4/16
+  - [[-1, 26], 1, Add, []] # 31-P4/16
+  - [-1, 3, C2f, [256]] # 32-P4/16
+
+  - [26, 1, nn.Conv2d, [256, 3, 2, 1]] # 33-P5/32
+  - [11, 1, ChannelAttention_HSFPN, []] # 34-P5/32
+  - [-1, 1, nn.Conv2d, [256, 1]] # 35-P5/32
+  - [33, 1, ChannelAttention_HSFPN, [4, False]] # 36-/640
+  - [[-1, -2], 1, Multiply, []] # 37-P5/32
+  - [[-1, 33], 1, Add, []] # 38-P5/32
+  - [-1, 3, C2f, [256]] # 39-P5/32
+
+  - [[25, 32, 39], 1, Detect, [nc]] # 40-P3/8,P4/16,P5/32

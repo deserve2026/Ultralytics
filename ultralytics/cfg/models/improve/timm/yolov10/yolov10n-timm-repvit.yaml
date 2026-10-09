@@ -1,0 +1,36 @@
+# Ultralytics 🚀 AGPL-3.0 License - https://ultralytics.com/license
+
+# YOLOv10n object detection model with P3/8 - P5/32 outputs
+# Model docs: https://docs.ultralytics.com/models/yolov10
+# Task docs: https://docs.ultralytics.com/tasks/detect
+
+# Parameters
+nc: 80 # number of classes
+scales: # model compound scaling constants, i.e. 'model=yolov10n.yaml' uses the 'n' scale
+  # [depth, width, max_channels]
+  n: [0.33, 0.25, 1024]
+
+backbone:
+  # [from, repeats, module, args]
+  - [-1, 1, repvit_m0_9, [False]] # 0-P2/4,P3/8,P4/16,P5/32
+  - [0, 1, GetIndexOutput, [1]] # 1-P3/8
+  - [0, 1, GetIndexOutput, [2]] # 2-P4/16
+  - [0, 1, GetIndexOutput, [3]] # 3-P5/32
+  - [-1, 1, SPPF, [1024, 5]] # 4-P5/32
+  - [-1, 1, PSA, [1024]] # 5-P5/32
+
+# YOLOv10 head
+head:
+  - [-1, 1, nn.Upsample, [None, 2, "nearest"]] # 6-P4/16
+  - [[-1, 2], 1, Concat, [1]] # 7-P4/16
+  - [-1, 3, C2f, [512]] # 8-P4/16
+  - [-1, 1, nn.Upsample, [None, 2, "nearest"]] # 9-P3/8
+  - [[-1, 1], 1, Concat, [1]] # 10-P3/8
+  - [-1, 3, C2f, [256]] # 11-P3/8
+  - [-1, 1, Conv, [256, 3, 2]] # 12-P4/16
+  - [[-1, 8], 1, Concat, [1]] # 13-P4/16
+  - [-1, 3, C2f, [512]] # 14-P4/16
+  - [-1, 1, SCDown, [512, 3, 2]] # 15-P5/32
+  - [[-1, 5], 1, Concat, [1]] # 16-P5/32
+  - [-1, 3, C2fCIB, [1024, True, True]] # 17-P5/32
+  - [[11, 14, 17], 1, v10Detect, [nc]] # 18-P3/8,P4/16,P5/32
