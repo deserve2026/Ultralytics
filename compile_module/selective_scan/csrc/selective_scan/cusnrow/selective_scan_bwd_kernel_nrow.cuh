@@ -100,7 +100,7 @@ void selective_scan_bwd_kernel(SSMParamsBwd params) {
         + dim_id_nrow * params.u_d_stride;
     input_t *delta = reinterpret_cast<input_t *>(params.delta_ptr) + batch_id * params.delta_batch_stride
         + dim_id_nrow * params.delta_d_stride;
-    input_t *dout = reinterpret_cast<input_t *>(params.dout_ptr) + batch_id * params.dout_batch_stride
+    input_t *doubt = reinterpret_cast<input_t *>(params.dout_ptr) + batch_id * params.dout_batch_stride
         + dim_id_nrow * params.dout_d_stride;
     weight_t *A = reinterpret_cast<weight_t *>(params.A_ptr) + dim_id_nrow * params.A_d_stride;
     input_t *Bvar = reinterpret_cast<input_t *>(params.B_ptr) + batch_id * params.B_batch_stride + group_id * params.B_group_stride;
@@ -123,7 +123,7 @@ void selective_scan_bwd_kernel(SSMParamsBwd params) {
     constexpr int kChunkSize = kNThreads * kNItems;
     u += (params.n_chunks - 1) * kChunkSize;
     delta += (params.n_chunks - 1) * kChunkSize;
-    dout += (params.n_chunks - 1) * kChunkSize;
+    doubt += (params.n_chunks - 1) * kChunkSize;
     Bvar += (params.n_chunks - 1) * kChunkSize;
     Cvar += (params.n_chunks - 1) * kChunkSize;
     for (int chunk = params.n_chunks - 1; chunk >= 0; --chunk) {
@@ -137,12 +137,12 @@ void selective_scan_bwd_kernel(SSMParamsBwd params) {
             __syncthreads();
             load_input<Ktraits>(delta + r * params.delta_d_stride, delta_vals_load[r], smem_load, params.seqlen - chunk * kChunkSize);
             __syncthreads();
-            load_input<Ktraits>(dout + r * params.dout_d_stride, dout_vals_load[r], smem_load, params.seqlen - chunk * kChunkSize);
+            load_input<Ktraits>(doubt + r * params.dout_d_stride, dout_vals_load[r], smem_load, params.seqlen - chunk * kChunkSize);
         }
         u -= kChunkSize;
         // Will reload delta at the same location if kDeltaSoftplus
         if constexpr (!kDeltaSoftplus) { delta -= kChunkSize; }
-        dout -= kChunkSize;
+        doubt -= kChunkSize;
 
         float dout_vals[kNRows][kNItems], delta_vals[kNRows][kNItems];
         float du_vals[kNRows][kNItems];

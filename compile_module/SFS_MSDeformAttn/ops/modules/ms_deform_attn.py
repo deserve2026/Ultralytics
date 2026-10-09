@@ -6,9 +6,7 @@
 # Modified from https://github.com/chengdazhi/Deformable-Convolution-V2-PyTorch/tree/pytorch_1.0.0
 # ------------------------------------------------------------------------------------------------
 
-from __future__ import absolute_import, division, print_function
 
-import math
 import warnings
 
 import torch
@@ -18,15 +16,12 @@ from torch.nn.init import constant_, xavier_uniform_
 
 from ..functions import MSDeformAttnFunction
 
-import os
-import random
-import numpy as np
-import matplotlib.pyplot as plt
 
 def _is_power_of_2(n):
     if (not isinstance(n, int)) or (n < 0):
-        raise ValueError('invalid input for _is_power_of_2: {} (type: {})'.format(n, type(n)))
+        raise ValueError(f"invalid input for _is_power_of_2: {n} (type: {type(n)})")
     return (n & (n - 1) == 0) and n != 0
+
 
 class MSDeformAttn_for_sfs(nn.Module):
     def __init__(self, d_model=256, n_levels=4, n_heads=8, n_points=4, ratio=1.0):
@@ -39,16 +34,16 @@ class MSDeformAttn_for_sfs(nn.Module):
         """
         super().__init__()
         if d_model % n_heads != 0:
-            raise ValueError('d_model must be divisible by n_heads, '
-                             'but got {} and {}'.format(d_model, n_heads))
+            raise ValueError(f"d_model must be divisible by n_heads, but got {d_model} and {n_heads}")
         _d_per_head = d_model // n_heads
         # you'd better set _d_per_head to a power of 2
         # which is more efficient in our CUDA implementation
         if not _is_power_of_2(_d_per_head):
             warnings.warn(
                 "You'd better set d_model in MSDeformAttn_for_sfs to make "
-                'the dimension of each attention head a power of 2 '
-                'which is more efficient in our CUDA implementation.')
+                "the dimension of each attention head a power of 2 "
+                "which is more efficient in our CUDA implementation."
+            )
 
         self.im2col_step = 64
 
@@ -64,17 +59,24 @@ class MSDeformAttn_for_sfs(nn.Module):
         self._reset_parameters()
 
     def _reset_parameters(self):
-        constant_(self.attention_weights.weight.data, 0.)
-        constant_(self.attention_weights.bias.data, 0.)
+        constant_(self.attention_weights.weight.data, 0.0)
+        constant_(self.attention_weights.bias.data, 0.0)
         xavier_uniform_(self.value_proj.weight.data)
-        constant_(self.value_proj.bias.data, 0.)
+        constant_(self.value_proj.bias.data, 0.0)
         xavier_uniform_(self.output_proj.weight.data)
-        constant_(self.output_proj.bias.data, 0.)
+        constant_(self.output_proj.bias.data, 0.0)
 
-    def forward(self, query, reference_points, input_flatten, input_spatial_shapes,
-                input_level_start_index, sampling_offsets,
-                input_padding_mask=None):
-        """
+    def forward(
+        self,
+        query,
+        reference_points,
+        input_flatten,
+        input_spatial_shapes,
+        input_level_start_index,
+        sampling_offsets,
+        input_padding_mask=None,
+    ):
+        r"""
         :param query                       (N, Length_{query}, C)
         :param reference_points            (N, Length_{query}, n_levels, 2), range in [0, 1], top-left (0,0), bottom-right (1, 1), including padding area
                                         or (N, Length_{query}, n_levels, 4), add additional (w, h) to form reference boxes
@@ -85,39 +87,43 @@ class MSDeformAttn_for_sfs(nn.Module):
 
         :return output                     (N, Length_{query}, C)
         """
-
         N, Len_q, _ = query.shape
         N, Len_in, _ = input_flatten.shape
-        assert (input_spatial_shapes[:, 0] *
-                input_spatial_shapes[:, 1]).sum() == Len_in
+        assert (input_spatial_shapes[:, 0] * input_spatial_shapes[:, 1]).sum() == Len_in
 
         value = self.value_proj(input_flatten)
         if input_padding_mask is not None:
             value = value.masked_fill(input_padding_mask[..., None], float(0))
 
-        value = value.view(N, Len_in, self.n_heads,
-                           int(self.ratio * self.d_model) // self.n_heads)
-        attention_weights = self.attention_weights(query).view(
-            N, Len_q, self.n_heads, self.n_levels * self.n_points)
-        attention_weights = F.softmax(attention_weights, -1).\
-            view(N, Len_q, self.n_heads, self.n_levels, self.n_points)
+        value = value.view(N, Len_in, self.n_heads, int(self.ratio * self.d_model) // self.n_heads)
+        attention_weights = self.attention_weights(query).view(N, Len_q, self.n_heads, self.n_levels * self.n_points)
+        attention_weights = F.softmax(attention_weights, -1).view(N, Len_q, self.n_heads, self.n_levels, self.n_points)
 
         if reference_points.shape[-1] == 2:
-            offset_normalizer = torch.stack(
-                [input_spatial_shapes[..., 1], input_spatial_shapes[..., 0]], -1)
-            sampling_locations = reference_points[:, :, None, :, None, :] \
-                                 + sampling_offsets / offset_normalizer[None, None, None, :, None, :]
+            offset_normalizer = torch.stack([input_spatial_shapes[..., 1], input_spatial_shapes[..., 0]], -1)
+            sampling_locations = (
+                reference_points[:, :, None, :, None, :]
+                + sampling_offsets / offset_normalizer[None, None, None, :, None, :]
+            )
             sampling_locations = sampling_locations.contiguous()
         elif reference_points.shape[-1] == 4:
-            sampling_locations = reference_points[:, :, None, :, None, :2] \
-                                 + sampling_offsets / self.n_points * reference_points[:, :, None, :, None, 2:] * 0.5
+            sampling_locations = (
+                reference_points[:, :, None, :, None, :2]
+                + sampling_offsets / self.n_points * reference_points[:, :, None, :, None, 2:] * 0.5
+            )
             sampling_locations = sampling_locations.contiguous()
         else:
             raise ValueError(
-                'Last dim of reference_points must be 2 or 4, but get {} instead.'
-                .format(reference_points.shape[-1]))
+                f"Last dim of reference_points must be 2 or 4, but get {reference_points.shape[-1]} instead."
+            )
 
-        output = MSDeformAttnFunction.apply(value, input_spatial_shapes, input_level_start_index,
-                                            sampling_locations, attention_weights, self.im2col_step)
+        output = MSDeformAttnFunction.apply(
+            value,
+            input_spatial_shapes,
+            input_level_start_index,
+            sampling_locations,
+            attention_weights,
+            self.im2col_step,
+        )
         output = self.output_proj(output)
         return output

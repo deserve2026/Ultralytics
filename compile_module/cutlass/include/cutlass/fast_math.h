@@ -231,7 +231,7 @@ void fast_divmod(int& quo, int64_t& rem, int64_t src, int div, unsigned int mul,
 ///
 /// This object precomputes two values used to accelerate the computation and is
 /// best used when the divisor is a grid-invariant. In this case, it may be
-/// computed in host code and marshalled along other kernel arguments using the
+/// computed in host code and marshaled along other kernel arguments using the
 /// 'Params' pattern.
 ///
 /// Example:
