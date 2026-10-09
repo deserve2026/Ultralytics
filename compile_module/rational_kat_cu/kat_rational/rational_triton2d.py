@@ -2,17 +2,27 @@ import torch
 import triton
 import triton.language as tl
 from torch import Tensor
+
 # ==============================================================================
 # 2D Forward Kernel: operates on a tensor of shape [B, D, H, W] in-place.
 # The rational function is applied along the D dimension.
 # ==============================================================================
 
+
 @triton.jit
 def rational_fwd_kernel_2d(
-    x_ptr, a_ptr, b_ptr, result_ptr,
-    B: tl.constexpr, D: tl.constexpr, H: tl.constexpr, W: tl.constexpr,
-    group: tl.constexpr, x_size: tl.constexpr, D_per_group: tl.constexpr,
-    BLOCK_SIZE: tl.constexpr
+    x_ptr,
+    a_ptr,
+    b_ptr,
+    result_ptr,
+    B: tl.constexpr,
+    D: tl.constexpr,
+    H: tl.constexpr,
+    W: tl.constexpr,
+    group: tl.constexpr,
+    x_size: tl.constexpr,
+    D_per_group: tl.constexpr,
+    BLOCK_SIZE: tl.constexpr,
 ):
     # Compute the global index.
     idx = tl.program_id(0) * BLOCK_SIZE + tl.arange(0, BLOCK_SIZE)
@@ -69,9 +79,7 @@ def rational_fwd_kernel_2d(
 
 
 def rational_fwd_triton_2d(x: Tensor, n: Tensor, d: Tensor, group: int) -> Tensor:
-    """
-    2D forward helper.
-    Expects x of shape [B, D, H, W] and applies the rational function along the D dimension.
+    """2D forward helper. Expects x of shape [B, D, H, W] and applies the rational function along the D dimension.
     """
     B, D, H, W = x.shape
     x_size = x.numel()  # Total number of elements.
@@ -82,25 +90,36 @@ def rational_fwd_triton_2d(x: Tensor, n: Tensor, d: Tensor, group: int) -> Tenso
     num_blocks = (x_size + BLOCK_SIZE - 1) // BLOCK_SIZE
 
     rational_fwd_kernel_2d[(num_blocks,)](
-        x, n, d, result,
-        B, D, H, W,
-        group, x_size, D_per_group,
-        BLOCK_SIZE=BLOCK_SIZE
+        x, n, d, result, B, D, H, W, group, x_size, D_per_group, BLOCK_SIZE=BLOCK_SIZE
     )
 
     return result
+
 
 # ==============================================================================
 # 2D Backward Kernel: computes gradients w.r.t. input and coefficients.
 # ==============================================================================
 
+
 @triton.jit
 def rational_bwd_kernel_2d(
-    grad_output_ptr, x_ptr, a_ptr, b_ptr,
-    d_x_ptr, d_a_ptr, d_b_ptr,
-    B: tl.constexpr, D: tl.constexpr, H: tl.constexpr, W: tl.constexpr,
-    group: tl.constexpr, x_size: tl.constexpr, n_size: tl.constexpr, d_size: tl.constexpr,
-    D_per_group: tl.constexpr, BLOCK_SIZE: tl.constexpr
+    grad_output_ptr,
+    x_ptr,
+    a_ptr,
+    b_ptr,
+    d_x_ptr,
+    d_a_ptr,
+    d_b_ptr,
+    B: tl.constexpr,
+    D: tl.constexpr,
+    H: tl.constexpr,
+    W: tl.constexpr,
+    group: tl.constexpr,
+    x_size: tl.constexpr,
+    n_size: tl.constexpr,
+    d_size: tl.constexpr,
+    D_per_group: tl.constexpr,
+    BLOCK_SIZE: tl.constexpr,
 ):
     idx = tl.program_id(0) * BLOCK_SIZE + tl.arange(0, BLOCK_SIZE)
     mask = idx < x_size
@@ -192,9 +211,8 @@ def rational_bwd_kernel_2d(
 
 
 def rational_bwd_triton_2d(grad_output: Tensor, x: Tensor, n: Tensor, d: Tensor, group: int):
-    """
-    2D backward helper.
-    Expects x and grad_output of shape [B, D, H, W]. Returns gradients for x, numerator, and denominator.
+    """2D backward helper. Expects x and grad_output of shape [B, D, H, W]. Returns gradients for x, numerator, and
+    denominator.
     """
     B, D, H, W = x.shape
     x_size = x.numel()
@@ -210,26 +228,38 @@ def rational_bwd_triton_2d(grad_output: Tensor, x: Tensor, n: Tensor, d: Tensor,
     num_blocks = (x_size + BLOCK_SIZE - 1) // BLOCK_SIZE
 
     rational_bwd_kernel_2d[(num_blocks,)](
-        grad_output, x, n, d,
-        d_x, d_n, d_d,
-        B, D, H, W,
-        group, x_size, n_size, d_size, D_per_group,
-        BLOCK_SIZE=BLOCK_SIZE
+        grad_output,
+        x,
+        n,
+        d,
+        d_x,
+        d_n,
+        d_d,
+        B,
+        D,
+        H,
+        W,
+        group,
+        x_size,
+        n_size,
+        d_size,
+        D_per_group,
+        BLOCK_SIZE=BLOCK_SIZE,
     )
 
     return d_x, d_n, d_d
+
 
 # ==============================================================================
 # Autograd Functions for 2D
 # ==============================================================================
 
+
 class RationalTriton2D(torch.autograd.Function):
     @staticmethod
     @torch.cuda.amp.custom_fwd(cast_inputs=torch.float32)
     def forward(ctx, input: Tensor, weight_numerator: Tensor, weight_denominator: Tensor, group: int) -> Tensor:
-        """
-        2D forward: Expects input of shape [B, D, H, W].
-        """
+        """2D forward: Expects input of shape [B, D, H, W]."""
         ctx.save_for_backward(input, weight_numerator, weight_denominator)
         ctx.group = group
         output = rational_fwd_triton_2d(input, weight_numerator, weight_denominator, group)
@@ -244,4 +274,3 @@ class RationalTriton2D(torch.autograd.Function):
             grad_output, input, weight_numerator, weight_denominator, group
         )
         return d_input, d_weight_numerator, d_weight_denominator, None
-

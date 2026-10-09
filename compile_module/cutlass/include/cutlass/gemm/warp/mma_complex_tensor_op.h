@@ -714,7 +714,7 @@ public:
             CUTLASS_PRAGMA_UNROLL
             for (int n = 0; n < MmaIterations::kColumn; ++n) {
                 // negate OperandB to accumulate  -(a.imag()*b.imag())
-                // negating OperandB emits less instrucitons than negating
+                // negating OperandB emits less instructions than negating
                 // OperandA as OperandB has less elements
                 negate<InstMmaOperandB> negate_op;
 

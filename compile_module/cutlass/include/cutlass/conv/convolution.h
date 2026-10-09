@@ -29,7 +29,7 @@
 
 This file contains definitions and utility functions for describing convolution
 problem sizes in terms of activation (NHWC), filter (KRSC), output (NPQK),
-pading (pad_h, pad_w), stride (stride_h, stride_w), dilation (dilation_h,
+padding (pad_h, pad_w), stride (stride_h, stride_w), dilation (dilation_h,
 dilation_w).  Furthermore, it defines helper functions to map cutlass' implicit
 gemm tensor extents, sizes, data types to that of convolutions extents, sizes,
 and data types.
