@@ -8,4 +8,4 @@
 
 from .ms_deform_attn import MSDeformAttn_for_sfs
 
-__all__ = ['MSDeformAttn_for_sfs']
+__all__ = ["MSDeformAttn_for_sfs"]

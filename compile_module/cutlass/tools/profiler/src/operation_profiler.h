@@ -75,7 +75,7 @@ protected:
     /// List of providers used to verify and compare each result
     ProviderVector verification_providers_;
 
-    /// Model performance result initailized by the operation profiler with
+    /// Model performance result initialized by the operation profiler with
     /// workload statistics and reasonable default state.
     PerformanceResult model_result_;
 
