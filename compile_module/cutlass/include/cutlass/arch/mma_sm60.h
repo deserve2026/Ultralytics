@@ -157,13 +157,13 @@ struct Mma<gemm::GemmShape<2, 2, 1>, 1, half_t, layout::ColumnMajor, half_t,
                     Array<half_t, 2> const& b, Array<half_t, 4> const& c) {
 #if (defined(__CUDA_ARCH__) && (__CUDA_ARCH__ >= 600))
 
-        __half2 Alo = __low2half2(reinterpret_cast<__half2 const&>(a));
+        __half2 Also = __low2half2(reinterpret_cast<__half2 const&>(a));
         __half2 Ahi = __high2half2(reinterpret_cast<__half2 const&>(a));
         __half2 const& B = reinterpret_cast<__half2 const&>(b);
 
         __half2 const* C = reinterpret_cast<__half2 const*>(&c);
 
-        __half2 Dlo = __hfma2(Alo, B, C[0]);
+        __half2 Dlo = __hfma2(Also, B, C[0]);
         __half2 Dhi = __hfma2(Ahi, B, C[0]);
 
         Array<half_t, 2>* D = reinterpret_cast<Array<half_t, 2>*>(&d);

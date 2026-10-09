@@ -21,13 +21,89 @@ backbone:
   # [from, repeats, module, args]
   - [-1, 1, Conv, [64, 3, 2]] # 0-P1/2
   - [-1, 1, Conv, [128, 3, 2]] # 1-P2/4
-  - [-1, 2, C3k2_Block, [256, {'module': ResidualBlock, 'param': {'module1': {'module': Conv, 'param': {k: 3, g: 1}}, 'module2': {'module': Conv, 'param': {k: 3, g: 1}}, 'attention': {'module': EMA, 'param': {factor: 16}}, 'shortcut': True, 'e': 0.5}}, False, 0.25]] # 2-P2/4
+  - [
+      -1,
+      2,
+      C3k2_Block,
+      [
+        256,
+        {
+          "module": ResidualBlock,
+          "param":
+            {
+              "module1": { "module": Conv, "param": { k: 3, g: 1 } },
+              "module2": { "module": Conv, "param": { k: 3, g: 1 } },
+              "attention": { "module": EMA, "param": { factor: 16 } },
+              "shortcut": True,
+              "e": 0.5,
+            },
+        },
+        False,
+        0.25,
+      ],
+    ] # 2-P2/4
   - [-1, 1, Conv, [256, 3, 2]] # 3-P3/8
-  - [-1, 2, C3k2_Block, [512, {'module': ResidualBlock, 'param': {'module1': {'module': Conv, 'param': {k: 3, g: 1}}, 'module2': {'module': Conv, 'param': {k: 3, g: 1}}, 'attention': {'module': EMA, 'param': {factor: 16}}, 'shortcut': True, 'e': 0.5}}, False, 0.25]] # 4-P3/8
+  - [
+      -1,
+      2,
+      C3k2_Block,
+      [
+        512,
+        {
+          "module": ResidualBlock,
+          "param":
+            {
+              "module1": { "module": Conv, "param": { k: 3, g: 1 } },
+              "module2": { "module": Conv, "param": { k: 3, g: 1 } },
+              "attention": { "module": EMA, "param": { factor: 16 } },
+              "shortcut": True,
+              "e": 0.5,
+            },
+        },
+        False,
+        0.25,
+      ],
+    ] # 4-P3/8
   - [-1, 1, Conv, [512, 3, 2]] # 5-P4/16
-  - [-1, 2, C3k2_Block, [512, {'module': ResidualBlock, 'param': {'module1': {'module': Conv, 'param': {k: 3, g: 1}}, 'module2': {'module': Conv, 'param': {k: 3, g: 1}}, 'attention': {'module': EMA, 'param': {factor: 16}}, 'shortcut': True, 'e': 0.5}}]] # 6-P4/16
+  - [
+      -1,
+      2,
+      C3k2_Block,
+      [
+        512,
+        {
+          "module": ResidualBlock,
+          "param":
+            {
+              "module1": { "module": Conv, "param": { k: 3, g: 1 } },
+              "module2": { "module": Conv, "param": { k: 3, g: 1 } },
+              "attention": { "module": EMA, "param": { factor: 16 } },
+              "shortcut": True,
+              "e": 0.5,
+            },
+        },
+      ],
+    ] # 6-P4/16
   - [-1, 1, Conv, [1024, 3, 2]] # 7-P5/32
-  - [-1, 2, C3k2_Block, [1024, {'module': ResidualBlock, 'param': {'module1': {'module': Conv, 'param': {k: 3, g: 1}}, 'module2': {'module': Conv, 'param': {k: 3, g: 1}}, 'attention': {'module': EMA, 'param': {factor: 16}}, 'shortcut': True, 'e': 0.5}}]] # 8-P5/32
+  - [
+      -1,
+      2,
+      C3k2_Block,
+      [
+        1024,
+        {
+          "module": ResidualBlock,
+          "param":
+            {
+              "module1": { "module": Conv, "param": { k: 3, g: 1 } },
+              "module2": { "module": Conv, "param": { k: 3, g: 1 } },
+              "attention": { "module": EMA, "param": { factor: 16 } },
+              "shortcut": True,
+              "e": 0.5,
+            },
+        },
+      ],
+    ] # 8-P5/32
   - [-1, 1, SPPF, [1024, 5, 3, True]] # 9-P5/32
   - [-1, 2, C2PSA, [1024]] # 10-P5/32
 
@@ -35,18 +111,90 @@ backbone:
 head:
   - [-1, 1, nn.Upsample, [None, 2, "nearest"]] # 11-P4/16
   - [[-1, 6], 1, Concat, [1]] # 12-P4/16
-  - [-1, 2, C3k2_Block, [512, {'module': ResidualBlock, 'param': {'module1': {'module': Conv, 'param': {k: 3, g: 1}}, 'module2': {'module': Conv, 'param': {k: 3, g: 1}}, 'attention': {'module': EMA, 'param': {factor: 16}}, 'shortcut': True, 'e': 0.5}}]] # 13-P4/16
+  - [
+      -1,
+      2,
+      C3k2_Block,
+      [
+        512,
+        {
+          "module": ResidualBlock,
+          "param":
+            {
+              "module1": { "module": Conv, "param": { k: 3, g: 1 } },
+              "module2": { "module": Conv, "param": { k: 3, g: 1 } },
+              "attention": { "module": EMA, "param": { factor: 16 } },
+              "shortcut": True,
+              "e": 0.5,
+            },
+        },
+      ],
+    ] # 13-P4/16
 
   - [-1, 1, nn.Upsample, [None, 2, "nearest"]] # 14-P3/8
   - [[-1, 4], 1, Concat, [1]] # 15-P3/8
-  - [-1, 2, C3k2_Block, [256, {'module': ResidualBlock, 'param': {'module1': {'module': Conv, 'param': {k: 3, g: 1}}, 'module2': {'module': Conv, 'param': {k: 3, g: 1}}, 'attention': {'module': EMA, 'param': {factor: 16}}, 'shortcut': True, 'e': 0.5}}]] # 16-P3/8
+  - [
+      -1,
+      2,
+      C3k2_Block,
+      [
+        256,
+        {
+          "module": ResidualBlock,
+          "param":
+            {
+              "module1": { "module": Conv, "param": { k: 3, g: 1 } },
+              "module2": { "module": Conv, "param": { k: 3, g: 1 } },
+              "attention": { "module": EMA, "param": { factor: 16 } },
+              "shortcut": True,
+              "e": 0.5,
+            },
+        },
+      ],
+    ] # 16-P3/8
 
   - [-1, 1, Conv, [256, 3, 2]] # 17-P4/16
   - [[-1, 13], 1, Concat, [1]] # 18-P4/16
-  - [-1, 2, C3k2_Block, [512, {'module': ResidualBlock, 'param': {'module1': {'module': Conv, 'param': {k: 3, g: 1}}, 'module2': {'module': Conv, 'param': {k: 3, g: 1}}, 'attention': {'module': EMA, 'param': {factor: 16}}, 'shortcut': True, 'e': 0.5}}]] # 19-P4/16
+  - [
+      -1,
+      2,
+      C3k2_Block,
+      [
+        512,
+        {
+          "module": ResidualBlock,
+          "param":
+            {
+              "module1": { "module": Conv, "param": { k: 3, g: 1 } },
+              "module2": { "module": Conv, "param": { k: 3, g: 1 } },
+              "attention": { "module": EMA, "param": { factor: 16 } },
+              "shortcut": True,
+              "e": 0.5,
+            },
+        },
+      ],
+    ] # 19-P4/16
 
   - [-1, 1, Conv, [512, 3, 2]] # 20-P5/32
   - [[-1, 10], 1, Concat, [1]] # 21-P5/32
-  - [-1, 1, C3k2_Block, [1024, {'module': ResidualBlock, 'param': {'module1': {'module': Conv, 'param': {k: 3, g: 1}}, 'module2': {'module': Conv, 'param': {k: 3, g: 1}}, 'attention': {'module': EMA, 'param': {factor: 16}}, 'shortcut': True, 'e': 0.5}}]] # 22-P5/32
+  - [
+      -1,
+      1,
+      C3k2_Block,
+      [
+        1024,
+        {
+          "module": ResidualBlock,
+          "param":
+            {
+              "module1": { "module": Conv, "param": { k: 3, g: 1 } },
+              "module2": { "module": Conv, "param": { k: 3, g: 1 } },
+              "attention": { "module": EMA, "param": { factor: 16 } },
+              "shortcut": True,
+              "e": 0.5,
+            },
+        },
+      ],
+    ] # 22-P5/32
 
   - [[16, 19, 22], 1, Detect, [nc]] # 23-P3/8,P4/16,P5/32
