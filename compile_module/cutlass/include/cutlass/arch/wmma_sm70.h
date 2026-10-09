@@ -110,7 +110,7 @@ struct Wmma<Shape_,  ///< Size of the matrix product (concept: GemmShape)
     }
 #else
     static_assert(false,
-                  "wmma.mma.sync for floating point multiplicands is avialable "
+                  "wmma.mma.sync for floating point multiplicands is available "
                   "only for SM70 and beyond");
 #endif
 };
